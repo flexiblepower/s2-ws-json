@@ -1,0 +1,31 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/FRBC.FillLevelTargetProfile.schema.json",
+	"title": "FRBC_FillLevelTargetProfile",
+	"properties": {
+		"message_type": {
+			"type": "string",
+			"const": "FRBC.FillLevelTargetProfile"
+		},
+		"message_id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of this message"
+		},
+		"start_time": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Time at which the FRBC.FillLevelTargetProfile starts."
+		},
+		"elements": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 288,
+			"items": {
+				"$ref": "../schemas/FRBC.FillLevelTargetProfileElement.schema.json"
+			},
+			"description": "List of different fill levels that have to be targeted within a given duration. There shall be at least one element. Elements must be placed in chronological order."
+		}
+	},
+	"required": ["message_type", "message_id", "start_time", "elements"],
+	"additionalProperties": false
+}

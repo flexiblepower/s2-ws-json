@@ -1,0 +1,7 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/InstructionStatus.schema.json",
+	"title": "InstructionStatus",
+	"enum": ["NEW", "ACCEPTED", "REJECTED", "REVOKED", "STARTED", "SUCCEEDED", "ABORTED"],
+	"description": "NEW: Instruction was newly created\nACCEPTED: Instruction has been accepted\nREJECTED: Instruction was rejected\nREVOKED: Instruction was revoked\nSTARTED: Instruction was executed\nSUCCEEDED: Instruction finished successfully\nABORTED: Instruction was aborted."
+}

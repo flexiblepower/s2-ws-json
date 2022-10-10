@@ -1,0 +1,7 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.PowerEnvelopeLimitType.schema.json",
+	"title": "PEBC_PowerEnvelopeLimitType",
+	"enum": ["UPPER_LIMIT", "LOWER_LIMIT"],
+	"description": "UPPER_LIMIT: Indicating the upper limit of a PEBC.PowerEnvelope (see Clause 7.6.2)\nLOWER_LIMIT: Indicating the lower limit of a PEBC.PowerEnvelope (see Clause 7.6.2)"
+}

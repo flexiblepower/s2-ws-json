@@ -1,0 +1,43 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/PEBC.EnergyConstraint.schema.json",
+	"title": "PEBC_EnergyConstraint",
+	"properties": {
+		"message_type": {
+			"type": "string",
+			"const": "PEBC.EnergyConstraint"
+		},
+		"message_id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of this message"
+		},
+		"id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "Identifier of this PEBC.EnergyConstraints. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+		},
+		"valid_from": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Moment this PEBC.EnergyConstraints information starts to be valid"
+		},
+		"valid_until": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Moment until this PEBC.EnergyConstraints information is valid."
+		},
+		"upper_average_power": {
+			"type": "number",
+			"description": "Upper average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated upper energy content can be derived. This is the highest amount of energy the resource will consume during that period of time."
+		},
+		"lower_average_power": {
+			"type": "number",
+			"description": "Lower average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated lower energy content can be derived. This is the lowest amount of energy the resource will consume during that period of time.  "
+		},
+		"commodity_quantity": {
+			"$ref": "../schemas/CommodityQuantity.schema.json",
+			"description": "Type of power quantity which applies to upper_average_power and lower_average_power"
+		}
+	},
+	"required": ["message_type", "message_id", "id", "valid_from", "valid_until", "upper_average_power", "lower_average_power", "commodity_quantity"],
+	"additionalProperties": false
+}

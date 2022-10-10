@@ -1,0 +1,746 @@
+asyncapi: 2.4.0
+info:
+  title: S2
+  version: 0.0.1-beta
+  description: This file specifices a WebSockets based version of the EN50491-12-2 standard.
+channels:
+  default:
+    bindings:
+      ws:
+        method: "POST"
+        query:
+          properties:
+        headers:
+          properties:
+        bindingVersion: "LATEST"
+    subscribe:
+      message:
+        oneOf:
+        - $ref: '#/components/messages/Handshake'
+        - $ref: '#/components/messages/HandshakeResponse'
+        - $ref: '#/components/messages/SelectControlType'
+        - $ref: '#/components/messages/ReceptionStatus'
+        - $ref: '#/components/messages/PPBC.ScheduleInstruction'
+        - $ref: '#/components/messages/PPBC.StartInterruptionInstruction'
+        - $ref: '#/components/messages/PPBC.EndInterruptionInstruction'
+        - $ref: '#/components/messages/SessionRequest'
+    publish:
+      message:
+        oneOf:
+        - $ref: '#/components/messages/Handshake'
+        - $ref: '#/components/messages/PowerMeasurement'
+        - $ref: '#/components/messages/ReceptionStatus'
+        - $ref: '#/components/messages/InstructionStatusUpdate'
+        - $ref: '#/components/messages/PowerForecast'
+        - $ref: '#/components/messages/ResourceManagerDetails'
+        - $ref: '#/components/messages/PPBC.PowerProfileDefinition'
+        - $ref: '#/components/messages/PPBC.PowerProfileStatus'
+        - $ref: '#/components/messages/RevokeObject'
+        - $ref: '#/components/messages/SessionRequest'
+components:
+  schemas:
+    Duration:
+      displayName: Duration
+      type: integer
+      minimum: 0
+      description: "Duration in milliseconds"
+    ID:
+      type: string
+      pattern: "[a-zA-Z0-9\\-_:]{2,64}"
+      description: "UUID"
+    Currency:
+      enum: [AED,ANG,AUD,CHE,CHF,CHW,EUR,GBP,LBP,LKR,LRD,LSL,LYD,MAD,MDL,MGA,MKD,MMK,MNT,MOP,MRO,MUR,MVR,MWK,MXN,MXV,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PGK,PHP,PKR,PLN,PYG,QAR,RON,RSD,RUB,RWF,SAR,SBD,SCR,SDG,SEK,SGD,SHP,SLL,SOS,SRD,SSP,STD,SYP,SZL,THB,TJS,TMT,TND,TOP,TRY,TTD,TWD,TZS,UAH,UGX,USD,USN,UYI,UYU,UZS,VEF,VND,VUV,WST,XAG,XAU,XBA,XBB,XBC,XBD,XCD,XOF,XPD,XPF,XPT,XSU,XTS,XUA,XXX,YER,ZAR,ZMW,ZWL]
+    SessionRequestType:
+      type: string
+      enum: ["RECONNECT", "TERMINATE"]
+      description: |
+        RECONNECT: Please reconnect the WebSocket session. Once reconnected, it starts from scratch with a handshake.
+        TERMINATE: Disconnect the session (client can try to reconnecting with exponential backoff)
+    RevokableObjects:
+      type: string
+      enum: ["PEBC.PowerConstraints", "PEBC.EnergyConstraint", "PEBC.Instruction", "PPBC.PowerProfileDefinition", "PPBC.ScheduleInstruction", "PPBC.StartInterruptionInstruction", "PPBC.EndInterruptionInstruction", "OMBC.SystemDescription", "OMBC.Instruction", "FRBC.SystemDescription", "FRBC.Instruction", "DDBC.SystemDescription", "DDBC.Instruction"]
+      description: |
+        PEBC.PowerConstraints: Object type PEBC.PowerConstraints
+        PEBC.EnergyConstraint: Object type PEBC.EnergyConstraint
+        PEBC.Instruction: Object type PEBC.Instruction
+        PPBC.PowerProfileDefinition: Object type PPBC.PowerProfileDefinition
+        PPBC.ScheduleInstruction: Object type PPBC.ScheduleInstruction
+        PPBC.StartInterruptionInstruction: Object type PPBC.StartInterruptionInstruction
+        PPBC.EndInterruptionInstruction: Object type PPBC.EndInterruptionInstruction
+        OMBC.SystemDescription: Object type OMBC.SystemDescription
+        OMBC.Instruction: Object type OMBC.Instruction
+        FRBC.SystemDescription: Object type FRBC.SystemDescription
+        FRBC.Instruction: Object type FRBC.Instruction
+        DDBC.SystemDescription: Object type DDBC.SystemDescription
+        DDBC.Instruction: Object type DDBC.Instruction
+    EnergyManagementRole:
+      type: string
+      enum: ["CEM", "RM"]
+      description: |
+        CEM: Customer Energy Manager
+        RM: Resource Manager
+    ReceptionStatusValues:
+      type: string
+      enum: ["INVALID_DATA", "INVALID_MESSAGE", "INVALID_CONTENT", "TEMPORARY_ERROR", "PERMANENT_ERROR", "OK"]
+      description: |
+        INVALID_DATA: Message not understood (e.g. not valid JSON, no message_id found). Consequence: Message is ignored, proceed if possible
+        INVALID_MESSAGE: Message was not according to schema. Consequence: Message is ignored, proceed if possible
+        INVALID_CONTENT: Message contents is invalid (e.g. contains a non-existing ID). Somewhat equivalent to BAD_REQUEST in HTTP.. Consequence: Message is ignored, proceed if possible.
+        TEMPORARY_ERROR: Receiver encountered an error. Consequence: Try to send to message again
+        PERMANENT_ERROR: Receiver encountered an error which it cannot recover from. Consequence: Disconnect.
+        OK: Message processed normally. Consequence: Proceed normally.
+    PowerValue:
+      type: object
+      required:
+      - commodity_quantity
+      - value
+      properties:
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: "The power quantity the value refers to"
+        value:
+          type: number
+          description: "Power value expressed in the unit associated with the CommodityQuantity"
+      additionalProperties: false
+    PowerForecastValue:
+      type: object
+      required:
+      - value_expected
+      - commodity_quantity
+      properties:
+        value_upper_limit:
+          type: number
+          description: "The upper boundary of the range with 100 % certainty the power value is in it"
+        value_upper_95PPR:
+          type: number
+          description: "The upper boundary of the range with 95 % certainty the power value is in it"
+        value_upper_68PPR:
+          type: number
+          description: "The upper boundary of the range with 68 % certainty the power value is in it"
+        value_expected:
+          type: number
+          description: "The expected power value."
+        value_lower_68PPR:
+          type: number
+          description: "The lower boundary of the range with 68 % certainty the power value is in it"
+        value_lower_95PPR:
+          type: number
+          description: "The lower boundary of the range with 95 % certainty the power value is in it"
+        value_lower_limit:
+          type: number
+          description: "The lower boundary of the range with 100 % certainty the power value is in it"
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: "The power quantity the value refers to"
+      additionalProperties: false
+    Role:
+      type: object
+      required:
+      - role
+      - commodity
+      properties:
+        role:
+          $ref: '#/components/schemas/RoleType'
+          description: "Role type of the Resource Manager for the given commodity"
+        commodity:
+          $ref: '#/components/schemas/Commodity'
+          description: "Commodity the role refers to."
+      additionalProperties: false
+    PowerForecastElement:
+      type: object
+      required:
+      - duration
+      - power_values
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: "Duration of the PowerForecastElement"
+        power_values:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/PowerForecastValue'
+          description: "The values of power that are expected for the given period of time. There shall be at least one PowerForecastValue, and at most one PowerForecastValue per CommodityQuantity."
+      additionalProperties: false
+    PPBC.PowerSequenceContainer:
+      type: object
+      required:
+      - id
+      - power_sequences
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the PPBC.PowerSequenceContainer. Must be unique in the scope of the PPBC.PowerProfileDefinition in which it is used."
+        power_sequences:
+          type: array
+          minItems: 1
+          maxItems: 288
+          items:
+            $ref: '#/components/schemas/PPBC.PowerSequence'
+          description: "List of alternative Sequences where one could be chosen by the CEM"
+      additionalProperties: false
+    PPBC.PowerSequence:
+      type: object
+      required:
+      - id
+      - elements
+      - is_interruptible
+      - abnormal_condition_only
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the PPBC.PowerSequence. Must be unique in the scope of the PPBC.PowerSequnceContainer in which it is used."
+        elements:
+          type: array
+          minItems: 1
+          maxItems: 288
+          items:
+            $ref: '#/components/schemas/PPBC.PowerSequenceElement'
+          description: "List of PPBC.PowerSequenceElements. Shall contain at least one element. Elements must be placed in chronological order."
+        is_interruptible:
+          type: boolean
+          description: "Indicates whether the option of pausing a sequence is available."
+        max_pause_before:
+          $ref: '#/components/schemas/Duration'
+          description: "The maximum duration for which a device can be paused between the end of the previous running sequence and the start of this one"
+        abnormal_condition_only:
+          type: boolean
+          description: "Indicates if this PPBC.PowerSequence may only be used during an abnormal condition"
+      additionalProperties: false
+    PPBC.PowerSequenceElement:
+      type: object
+      required:
+      - duration
+      - power_values
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: "Duration of the PPBC.PowerSequenceElement."
+        power_values:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/PowerForecastValue'
+          description: "The value of power and deviations for the given duration. The array should contain at least one PowerForecastValue and at most one PowerForecastValue per CommodityQuantity."
+      additionalProperties: false
+    PPBC.PowerSequenceContainerStatus:
+      type: object
+      required:
+      - power_profile_id
+      - sequence_container_id
+      - status
+      properties:
+        power_profile_id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the PPBC.PowerProfileDefinition of which the data element ‘sequence_container_id’ refers to. "
+        sequence_container_id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the PPBC.PowerSequenceContainer this PPBC.PowerSequenceContainerStatus provides information about."
+        selected_sequence_id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of selected PPBC.PowerSequence. When no ID is given, no sequence was selected yet."
+        progress:
+          $ref: '#/components/schemas/Duration'
+          description: "Time that has passed since the selected sequence has started. A value must be provided, unless no sequence has been selected or the selected sequence hasn’t started yet."
+        status:
+          $ref: '#/components/schemas/PPBC.PowerSequenceStatus'
+          description: "Status of the selected PPBC.PowerSequence"
+      additionalProperties: false
+    RoleType:
+      type: string
+      enum: ["ENERGY_PRODUCER", "ENERGY_CONSUMER", "ENERGY_STORAGE"]
+      description: |
+        ENERGY_PRODUCER: Identifier for RoleType Producer
+        ENERGY_CONSUMER: Identifier for RoleType Consumer
+        ENERGY_STORAGE: Identifier for RoleType Storage
+    Commodity:
+      type: string
+      enum: ["GAS", "HEAT", "ELECTRICITY", "OIL"]
+      description: |
+        GAS: Identifier for Commodity GAS
+        HEAT: Identifier for Commodity HEAT
+        ELECTRICITY: Identifier for Commodity ELECTRICITY
+        OIL: Identifier for Commodity OIL
+    CommodityQuantity:
+      type: string
+      enum: ["ELECTRIC.POWER.L1", "ELECTRIC.POWER.L2", "ELECTRIC.POWER.L3", "ELECTRIC.POWER.3_PHASE_SYMMETRIC", "NATURAL_GAS.FLOW_RATE", "HYDROGEN.FLOW_RATE", "HEAT.TEMPERATURE", "HEAT.FLOW_RATE", "HEAT.THERMAL_POWER", "OIL.FLOW_RATE"]
+      description: |
+        ELECTRIC.POWER.L1: Electric power described in Watt on phase 1. If a device utilizes only one phase it should always use L1.
+        ELECTRIC.POWER.L2: Electric power described in Watt on phase 2. Only applicable for 3 phase devices.
+        ELECTRIC.POWER.L3: Electric power described in Watt on phase 3. Only applicable for 3 phase devices.
+        ELECTRIC.POWER.3_PHASE_SYMMETRIC: Electric power described in Watt on when power is equally shared among the three phases. Only applicable for 3 phase devices.
+        NATURAL_GAS.FLOW_RATE: Gas flow rate described in liters per second
+        HYDROGEN.FLOW_RATE: Gas flow rate described in grams per second
+        HEAT.TEMPERATURE: Heat described in degrees Celsius
+        HEAT.FLOW_RATE: Flow rate of heat carrying gas or liquid in liters per second
+        HEAT.THERMAL_POWER: Thermal power in Watt
+        OIL.FLOW_RATE: Oil flow rate described in liters per hour
+    InstructionStatus:
+      type: string
+      enum: ["NEW", "ACCEPTED", "REJECTED", "REVOKED", "STARTED", "SUCCEEDED", "ABORTED"]
+      description: |
+        NEW: Instruction was newly created
+        ACCEPTED: Instruction has been accepted
+        REJECTED: Instruction was rejected
+        REVOKED: Instruction was revoked
+        STARTED: Instruction was executed
+        SUCCEEDED: Instruction finished successfully
+        ABORTED: Instruction was aborted.
+    ControlType:
+      type: string
+      enum: ["POWER_ENVELOPE_BASED_CONTROL", "POWER_PROFILE_BASED_CONTROL", "OPERATION_MODE_BASED_CONTROL", "FILL_RATE_BASED_CONTROL", "DEMAND_DRIVEN_BASED_CONTROL", "NOT_CONTROLABLE", "NO_SELECTION"]
+      description: |
+        POWER_ENVELOPE_BASED_CONTROL: Identifier for the Power Envelope Based Control type
+        POWER_PROFILE_BASED_CONTROL: Identifier for the Power Profile Based Control type
+        OPERATION_MODE_BASED_CONTROL: Identifier for the Operation Mode Based Control type
+        FILL_RATE_BASED_CONTROL: Identifier for the Demand Driven Based Control type
+        DEMAND_DRIVEN_BASED_CONTROL: Identifier for the Fill Rate Based Control type
+        NOT_CONTROLABLE: Identifier that is to be used if no control is possible. Resources of this type can still provide measurements and forecast
+        NO_SELECTION: Identifier that is to be used if no control type is or has been selected. 
+    PPBC.PowerSequenceStatus:
+      type: string
+      enum: ["NOT_SCHEDULED", "SCHEDULED", "EXECUTING", "INTERRUPTED", "FINISHED", "ABORTED"]
+      description: |
+        NOT_SCHEDULED: No PPBC.PowerSequence within the PPBC.PowerSequenceContainer is scheduled
+        SCHEDULED: The selected PPBC.PowerSequence is scheduled to be executed in the future
+        EXECUTING: The selected PPBC.PowerSequence is currently being executed
+        INTERRUPTED: The selected PPBC.PowerSequence is being executed, but is currently interrupted and will continue afterwards
+        FINISHED: The selected PPBC.PowerSequence was executed and finished successfully
+        ABORTED: The selected PPBC.PowerSequence was aborted by the device and will not continue
+  messages:
+    SelectControlType:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - control_type
+        properties:
+          message_type:
+            type: string
+            const: "SelectControlType"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          control_type:
+            $ref: '#/components/schemas/ControlType'
+            description: "The ControlType to activate. Must be one of the available ControlTypes as defined in the ResourceManagerDetails"
+        additionalProperties: false
+    SessionRequest:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - request
+        properties:
+          message_type:
+            type: string
+            const: "SessionRequest"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          request:
+            $ref: '#/components/schemas/SessionRequestType'
+            description: "The type of request"
+          diagnostic_label:
+            type: string
+            description: "Optional field for a human readible descirption for debugging purposes"
+        additionalProperties: false
+    RevokeObject:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - object_type
+        - object_id
+        properties:
+          message_type:
+            type: string
+            const: "RevokeObject"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          object_type:
+            $ref: '#/components/schemas/RevokableObjects'
+            description: "The type of object that needs to be revoked"
+          object_id:
+            $ref: '#/components/schemas/ID'
+            description: "The ID of object that needs to be revoked"
+        additionalProperties: false
+    Handshake:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - role
+        properties:
+          message_type:
+            type: string
+            const: "Handshake"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          role:
+            $ref: '#/components/schemas/EnergyManagementRole'
+            description: "The role of the sender of this message"
+          supported_protocol_versions:
+            type: array
+            minItems: 1
+            items:
+              type: string
+            description: "Protocol versions supported by the sender of this message. This field is mandatory for the RM, but optional for the CEM."
+        additionalProperties: false
+    HandshakeResponse:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - selected_protocol_version
+        properties:
+          message_type:
+            type: string
+            const: "HandshakeResponse"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          selected_protocol_version:
+            type: string
+            description: "The protocol version the CEM selected for this session"
+        additionalProperties: false
+    ResourceManagerDetails:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - resource_id
+        - roles
+        - instruction_processing_delay
+        - available_control_types
+        - provides_forecast
+        - provides_power_measurement_types
+        properties:
+          message_type:
+            type: string
+            const: "ResourceManagerDetails"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          resource_id:
+            $ref: '#/components/schemas/ID'
+            description: "Identifier of the Resource Manager. Must be unique within the scope of the CEM."
+          name:
+            type: string
+            description: "Human readable name given by user"
+          roles:
+            type: array
+            minItems: 1
+            maxItems: 3
+            items:
+              $ref: '#/components/schemas/Role'
+            description: "Each Resource Manager provides one or more energy Roles"
+          manufacturer:
+            type: string
+            description: "Name of Manufacturer"
+          model:
+            type: string
+            description: "Name of the model of the device (provided by the manufacturer)"
+          serial_number:
+            type: string
+            description: "Serial number of the device (provided by the manufacturer)"
+          firmware_version:
+            type: string
+            description: "Version identifier of the firmware used in the device (provided by the manufacturer)"
+          instruction_processing_delay:
+            $ref: '#/components/schemas/Duration'
+            description: "The average time the combination of Resource Manager and HBES/BACS/SASS or (Smart) device needs to process and execute an instruction"
+          available_control_types:
+            type: array
+            minItems: 1
+            maxItems: 5
+            items:
+              $ref: '#/components/schemas/ControlType'
+            description: "The control types supported by this Resource Manager."
+          currency:
+            $ref: '#/components/schemas/Currency'
+            description: "Currency to be used for all information regarding costs. Mandatory if cost information is published."
+          provides_forecast:
+            type: boolean
+            description: "Indicates whether the ResourceManager is able to provide PowerForecasts"
+          provides_power_measurement_types:
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/CommodityQuantity'
+            description: "Array of all CommodityQuantities that this Resource Manager can provide measurements for. "
+        additionalProperties: false
+    PowerMeasurement:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - measurement_timestamp
+        - values
+        properties:
+          message_type:
+            type: string
+            const: "PowerMeasurement"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          measurement_timestamp:
+            type: string
+            format: date-time
+            description: "Timestamp when PowerValues were measured."
+          values:
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/PowerValue'
+            description: "Array of measured PowerValues. Must contain at least one item and at most one item per ‘commodity_quantity’ (defined inside the PowerValue)."
+        additionalProperties: false
+    ReceptionStatus:
+      payload:
+        type: object
+        required:
+        - message_type
+        - subject_message_id
+        - status
+        properties:
+          message_type:
+            type: string
+            const: "ReceptionStatus"
+          subject_message_id:
+            $ref: '#/components/schemas/ID'
+            description: "The message this ReceptionStatus refers to"
+          status:
+            $ref: '#/components/schemas/ReceptionStatusValues'
+            description: "Enumeration of status values"
+          diagnostic_label:
+            type: string
+            description: "Diagnostic label that can be used to provide additional information for debugging. However, not for HMI purposes."
+        additionalProperties: false
+    InstructionStatusUpdate:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - instruction_id
+        - status_type
+        - timestamp
+        properties:
+          message_type:
+            type: string
+            const: "InstructionStatusUpdate"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          instruction_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of this instruction (as provided by the CEM) "
+          status_type:
+            $ref: '#/components/schemas/InstructionStatus'
+            description: "Present status of this instruction."
+          timestamp:
+            type: string
+            format: date-time
+            description: "Timestamp when status_type has changed the last time."
+        additionalProperties: false
+    PowerForecast:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - start_time
+        - elements
+        properties:
+          message_type:
+            type: string
+            const: "PowerForecast"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          start_time:
+            type: string
+            format: date-time
+            description: "Start time of time period that is covered by the profile."
+          elements:
+            type: array
+            minItems: 1
+            maxItems: 288
+            items:
+              $ref: '#/components/schemas/PowerForecastElement'
+            description: "Elements of which this forecast consists. Contains at least one element. Elements must be placed in chronological order."
+        additionalProperties: false
+    PPBC.PowerProfileDefinition:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - id
+        - start_time
+        - end_time
+        - power_sequences_containers
+        properties:
+          message_type:
+            type: string
+            const: "PPBC.PowerProfileDefinition"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerProfileDefinition. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+          start_time:
+            type: string
+            format: date-time
+            description: "Indicates the first possible time the first PPBC.PowerSequence could start"
+          end_time:
+            type: string
+            format: date-time
+            description: "Indicates when the last PPBC.PowerSequence shall be finished at the latest"
+          power_sequences_containers:
+            type: array
+            minItems: 1
+            maxItems: 1000
+            items:
+              $ref: '#/components/schemas/PPBC.PowerSequenceContainer'
+            description: "The PPBC.PowerSequenceContainers that make up this PPBC.PowerProfileDefinition. There shall be at least one PPBC.PowerSequenceContainer that includes at least one PPBC.PowerSequence. PPBC.PowerSequenceContainers must be placed in chronological order."
+        additionalProperties: false
+    PPBC.PowerProfileStatus:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - sequence_container_status
+        properties:
+          message_type:
+            type: string
+            const: "PPBC.PowerProfileStatus"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          sequence_container_status:
+            type: array
+            minItems: 1
+            maxItems: 1000
+            items:
+              $ref: '#/components/schemas/PPBC.PowerSequenceContainerStatus'
+            description: "Array with status information for all PPBC.PowerSequenceContainers in the PPBC.PowerProfileDefinition."
+        additionalProperties: false
+    PPBC.ScheduleInstruction:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - id
+        - power_profile_id
+        - sequence_container_id
+        - power_sequence_id
+        - execution_time
+        - abnormal_condition
+        properties:
+          message_type:
+            type: string
+            const: "PPBC.ScheduleInstruction"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+          power_profile_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence is being selected and scheduled by the CEM."
+          sequence_container_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence is being selected and scheduled by the CEM."
+          power_sequence_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerSequence that is being selected and scheduled by the CEM."
+          execution_time:
+            type: string
+            format: date-time
+            description: "Start time of the PPBC.PowerSequence."
+          abnormal_condition:
+            type: boolean
+            description: "Indicates if this is an instruction during an abnormal condition"
+        additionalProperties: false
+    PPBC.StartInterruptionInstruction:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - id
+        - power_profile_id
+        - sequence_container_id
+        - power_sequence_id
+        - execution_time
+        - abnormal_condition
+        properties:
+          message_type:
+            type: string
+            const: "PPBC.StartInterruptionInstruction"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+          power_profile_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence is being interrupted by the CEM."
+          sequence_container_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence is being interrupted by the CEM."
+          power_sequence_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerSequence that the CEM wants to interrupt."
+          execution_time:
+            type: string
+            format: date-time
+            description: "Start time of the interruption of the PPBC.PowerSequence."
+          abnormal_condition:
+            type: boolean
+            description: "Indicates if this is an instruction during an abnormal condition"
+        additionalProperties: false
+    PPBC.EndInterruptionInstruction:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - id
+        - power_profile_id
+        - sequence_container_id
+        - power_sequence_id
+        - execution_time
+        - abnormal_condition
+        properties:
+          message_type:
+            type: string
+            const: "PPBC.EndInterruptionInstruction"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+          power_profile_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence interruption is being ended by the CEM."
+          sequence_container_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence interruption is being ended by the CEM."
+          power_sequence_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the PPBC.PowerSequence for which the CEM wants to end the interruption."
+          execution_time:
+            type: string
+            format: date-time
+            description: "End time of Interruption of the PPBC.PowerSequence."
+          abnormal_condition:
+            type: boolean
+            description: "Indicates if this is an instruction during an abnormal condition"
+        additionalProperties: false

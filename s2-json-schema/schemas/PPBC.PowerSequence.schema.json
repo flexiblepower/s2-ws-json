@@ -1,0 +1,34 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PPBC.PowerSequence.schema.json",
+	"title": "PPBC_PowerSequence",
+	"properties": {
+		"id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of the PPBC.PowerSequence. Must be unique in the scope of the PPBC.PowerSequnceContainer in which it is used."
+		},
+		"elements": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 288,
+			"items": {
+				"$ref": "../schemas/PPBC.PowerSequenceElement.schema.json"
+			},
+			"description": "List of PPBC.PowerSequenceElements. Shall contain at least one element. Elements must be placed in chronological order."
+		},
+		"is_interruptible": {
+			"type": "boolean",
+			"description": "Indicates whether the option of pausing a sequence is available."
+		},
+		"max_pause_before": {
+			"$ref": "../schemas/Duration.schema.json",
+			"description": "The maximum duration for which a device can be paused between the end of the previous running sequence and the start of this one"
+		},
+		"abnormal_condition_only": {
+			"type": "boolean",
+			"description": "Indicates if this PPBC.PowerSequence may only be used during an abnormal condition"
+		}
+	},
+	"required": ["id", "elements", "is_interruptible", "abnormal_condition_only"],
+	"additionalProperties": false
+}

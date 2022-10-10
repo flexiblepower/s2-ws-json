@@ -1,0 +1,30 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/FRBC.OperationMode.schema.json",
+	"title": "FRBC_OperationMode",
+	"properties": {
+		"id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of the FRBC.OperationMode. Must be unique in the scope of the FRBC.ActuatorDescription in which it is used."
+		},
+		"diagnostic_label": {
+			"type": "string",
+			"description": "Human readable name/description of the FRBC.OperationMode. This element is only intended for diagnostic purposes and not for HMI applications."
+		},
+		"elements": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 100,
+			"items": {
+				"$ref": "../schemas/FRBC.OperationModeElement.schema.json"
+			},
+			"description": "List of FRBC.OperationModeElements, which describe the properties of this FRBC.OperationMode depending on the fill_level. The fill_level_ranges of the items in the Array must be contiguous."
+		},
+		"abnormal_condition_only": {
+			"type": "boolean",
+			"description": "Indicates if this FRBC.OperationMode may only be used during an abnormal condition"
+		}
+	},
+	"required": ["id", "elements", "abnormal_condition_only"],
+	"additionalProperties": false
+}

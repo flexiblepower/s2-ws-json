@@ -1,0 +1,44 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/PEBC.PowerConstraints.schema.json",
+	"title": "PEBC_PowerConstraints",
+	"properties": {
+		"message_type": {
+			"type": "string",
+			"const": "PEBC.PowerConstraints"
+		},
+		"message_id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of this message"
+		},
+		"id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "Identifier of this PEBC.PowerConstraints. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+		},
+		"valid_from": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Moment this PEBC.PowerConstraints start to be valid"
+		},
+		"valid_until": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Moment until this PEBC.PowerConstraints is valid. If valid_until is not present, there is no determined end time of this PEBC.PowerConstraints."
+		},
+		"consequence_type": {
+			"$ref": "../schemas/PEBC.PowerEnvelopeConsequenceType.schema.json",
+			"description": "Type of consequence of limiting power"
+		},
+		"allowed_limit_ranges": {
+			"type": "array",
+			"minItems": 2,
+			"maxItems": 100,
+			"items": {
+				"$ref": "../schemas/PEBC.AllowedLimitRange.schema.json"
+			},
+			"description": "The actual constraints. There shall be at least one PEBC.AllowedLimitRange for the UPPER_LIMIT and at least one AllowedLimitRange for the LOWER_LIMIT. It is allowed to have multiple PEBC.AllowedLimitRange objects with identical CommodityQuantities and LimitTypes."
+		}
+	},
+	"required": ["message_type", "message_id", "id", "valid_from", "consequence_type", "allowed_limit_ranges"],
+	"additionalProperties": false
+}

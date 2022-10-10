@@ -1,0 +1,31 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/FRBC.UsageForecast.schema.json",
+	"title": "FRBC_UsageForecast",
+	"properties": {
+		"message_type": {
+			"type": "string",
+			"const": "FRBC.UsageForecast"
+		},
+		"message_id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of this message"
+		},
+		"start_time": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Time at which the FRBC.UsageForecast starts."
+		},
+		"elements": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 288,
+			"items": {
+				"$ref": "../schemas/FRBC.UsageForecastElement.schema.json"
+			},
+			"description": "Further elements that model the profile. There shall be at least one element. Elements must be placed in chronological order."
+		}
+	},
+	"required": ["message_type", "message_id", "start_time", "elements"],
+	"additionalProperties": false
+}

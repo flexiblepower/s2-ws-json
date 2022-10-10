@@ -1,0 +1,7 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/RevokableObjects.schema.json",
+	"title": "RevokableObjects",
+	"enum": ["PEBC.PowerConstraints", "PEBC.EnergyConstraint", "PEBC.Instruction", "PPBC.PowerProfileDefinition", "PPBC.ScheduleInstruction", "PPBC.StartInterruptionInstruction", "PPBC.EndInterruptionInstruction", "OMBC.SystemDescription", "OMBC.Instruction", "FRBC.SystemDescription", "FRBC.Instruction", "DDBC.SystemDescription", "DDBC.Instruction"],
+	"description": "PEBC.PowerConstraints: Object type PEBC.PowerConstraints\nPEBC.EnergyConstraint: Object type PEBC.EnergyConstraint\nPEBC.Instruction: Object type PEBC.Instruction\nPPBC.PowerProfileDefinition: Object type PPBC.PowerProfileDefinition\nPPBC.ScheduleInstruction: Object type PPBC.ScheduleInstruction\nPPBC.StartInterruptionInstruction: Object type PPBC.StartInterruptionInstruction\nPPBC.EndInterruptionInstruction: Object type PPBC.EndInterruptionInstruction\nOMBC.SystemDescription: Object type OMBC.SystemDescription\nOMBC.Instruction: Object type OMBC.Instruction\nFRBC.SystemDescription: Object type FRBC.SystemDescription\nFRBC.Instruction: Object type FRBC.Instruction\nDDBC.SystemDescription: Object type DDBC.SystemDescription\nDDBC.Instruction: Object type DDBC.Instruction"
+}

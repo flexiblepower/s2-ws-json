@@ -1,0 +1,38 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/DDBC.OperationMode.schema.json",
+	"title": "DDBC_OperationMode",
+	"properties": {
+		"Id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of this operation mode. Must be unique in the scope of the DDBC.ActuatorDescription in which it is used."
+		},
+		"diagnostic_label": {
+			"type": "string",
+			"description": "Human readable name/description of the DDBC.OperationMode. This element is only intended for diagnostic purposes and not for HMI applications."
+		},
+		"power_ranges": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 10,
+			"items": {
+				"$ref": "../schemas/PowerRange.schema.json"
+			},
+			"description": "The power produced or consumed by this operation mode. The start of each PowerRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1. In the array there must be at least one PowerRange, and at most one PowerRange per CommodityQuantity."
+		},
+		"supply_range": {
+			"$ref": "../schemas/NumberRange.schema.json",
+			"description": "The supply rate this DDBC.OperationMode can deliver for the CEM to match the demand rate. The start of the NumberRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1."
+		},
+		"running_costs": {
+			"$ref": "../schemas/NumberRange.schema.json",
+			"description": "Additional costs per second (e.g. wear, services) associated with this operation mode in the currency defined by the ResourceManagerDetails, excluding the commodity cost. The range is expressing uncertainty and is not linked to the operation_mode_factor."
+		},
+		"abnormal_condition_only": {
+			"type": "boolean",
+			"description": "Indicates if this DDBC.OperationMode may only be used during an abnormal condition."
+		}
+	},
+	"required": ["Id", "power_ranges", "supply_range", "abnormal_condition_only"],
+	"additionalProperties": false
+}

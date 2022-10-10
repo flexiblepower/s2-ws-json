@@ -1,0 +1,49 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/OMBC.SystemDescription.schema.json",
+	"title": "OMBC_SystemDescription",
+	"properties": {
+		"message_type": {
+			"type": "string",
+			"const": "OMBC.SystemDescription"
+		},
+		"message_id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of this message"
+		},
+		"valid_from": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Moment this OMBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past."
+		},
+		"operation_modes": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 100,
+			"items": {
+				"$ref": "../schemas/OMBC.OperationMode.schema.json"
+			},
+			"description": "OMBC.OperationModes available for the CEM in order to coordinate the device behaviour."
+		},
+		"transitions": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 1000,
+			"items": {
+				"$ref": "../schemas/Transition.schema.json"
+			},
+			"description": "Possible transitions to switch from one OMBC.OperationMode to another."
+		},
+		"timers": {
+			"type": "array",
+			"minItems": 0,
+			"maxItems": 1000,
+			"items": {
+				"$ref": "../schemas/Timer.schema.json"
+			},
+			"description": "Timers that control when certain transitions can be made."
+		}
+	},
+	"required": ["message_type", "message_id", "valid_from", "operation_modes", "transitions", "timers"],
+	"additionalProperties": false
+}

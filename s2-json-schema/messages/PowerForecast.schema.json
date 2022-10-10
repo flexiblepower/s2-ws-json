@@ -1,0 +1,31 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/PowerForecast.schema.json",
+	"title": "PowerForecast",
+	"properties": {
+		"message_type": {
+			"type": "string",
+			"const": "PowerForecast"
+		},
+		"message_id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of this message"
+		},
+		"start_time": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Start time of time period that is covered by the profile."
+		},
+		"elements": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 288,
+			"items": {
+				"$ref": "../schemas/PowerForecastElement.schema.json"
+			},
+			"description": "Elements of which this forecast consists. Contains at least one element. Elements must be placed in chronological order."
+		}
+	},
+	"required": ["message_type", "message_id", "start_time", "elements"],
+	"additionalProperties": false
+}

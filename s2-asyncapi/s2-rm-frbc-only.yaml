@@ -1,0 +1,944 @@
+asyncapi: 2.4.0
+info:
+  title: S2
+  version: 0.0.1-beta
+  description: This file specifices a WebSockets based version of the EN50491-12-2 standard.
+channels:
+  default:
+    bindings:
+      ws:
+        method: "POST"
+        query:
+          properties:
+        headers:
+          properties:
+        bindingVersion: "LATEST"
+    subscribe:
+      message:
+        oneOf:
+        - $ref: '#/components/messages/Handshake'
+        - $ref: '#/components/messages/HandshakeResponse'
+        - $ref: '#/components/messages/SelectControlType'
+        - $ref: '#/components/messages/ReceptionStatus'
+        - $ref: '#/components/messages/FRBC.Instruction'
+        - $ref: '#/components/messages/SessionRequest'
+    publish:
+      message:
+        oneOf:
+        - $ref: '#/components/messages/Handshake'
+        - $ref: '#/components/messages/PowerMeasurement'
+        - $ref: '#/components/messages/ReceptionStatus'
+        - $ref: '#/components/messages/InstructionStatusUpdate'
+        - $ref: '#/components/messages/PowerForecast'
+        - $ref: '#/components/messages/ResourceManagerDetails'
+        - $ref: '#/components/messages/FRBC.SystemDescription'
+        - $ref: '#/components/messages/FRBC.ActuatorStatus'
+        - $ref: '#/components/messages/FRBC.StorageStatus'
+        - $ref: '#/components/messages/FRBC.LeakageBehaviour'
+        - $ref: '#/components/messages/FRBC.UsageForecast'
+        - $ref: '#/components/messages/FRBC.FillLevelTargetProfile'
+        - $ref: '#/components/messages/RevokeObject'
+        - $ref: '#/components/messages/SessionRequest'
+components:
+  schemas:
+    Duration:
+      displayName: Duration
+      type: integer
+      minimum: 0
+      description: "Duration in milliseconds"
+    ID:
+      type: string
+      pattern: "[a-zA-Z0-9\\-_:]{2,64}"
+      description: "UUID"
+    Currency:
+      enum: [AED,ANG,AUD,CHE,CHF,CHW,EUR,GBP,LBP,LKR,LRD,LSL,LYD,MAD,MDL,MGA,MKD,MMK,MNT,MOP,MRO,MUR,MVR,MWK,MXN,MXV,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PGK,PHP,PKR,PLN,PYG,QAR,RON,RSD,RUB,RWF,SAR,SBD,SCR,SDG,SEK,SGD,SHP,SLL,SOS,SRD,SSP,STD,SYP,SZL,THB,TJS,TMT,TND,TOP,TRY,TTD,TWD,TZS,UAH,UGX,USD,USN,UYI,UYU,UZS,VEF,VND,VUV,WST,XAG,XAU,XBA,XBB,XBC,XBD,XCD,XOF,XPD,XPF,XPT,XSU,XTS,XUA,XXX,YER,ZAR,ZMW,ZWL]
+    SessionRequestType:
+      type: string
+      enum: ["RECONNECT", "TERMINATE"]
+      description: |
+        RECONNECT: Please reconnect the WebSocket session. Once reconnected, it starts from scratch with a handshake.
+        TERMINATE: Disconnect the session (client can try to reconnecting with exponential backoff)
+    RevokableObjects:
+      type: string
+      enum: ["PEBC.PowerConstraints", "PEBC.EnergyConstraint", "PEBC.Instruction", "PPBC.PowerProfileDefinition", "PPBC.ScheduleInstruction", "PPBC.StartInterruptionInstruction", "PPBC.EndInterruptionInstruction", "OMBC.SystemDescription", "OMBC.Instruction", "FRBC.SystemDescription", "FRBC.Instruction", "DDBC.SystemDescription", "DDBC.Instruction"]
+      description: |
+        PEBC.PowerConstraints: Object type PEBC.PowerConstraints
+        PEBC.EnergyConstraint: Object type PEBC.EnergyConstraint
+        PEBC.Instruction: Object type PEBC.Instruction
+        PPBC.PowerProfileDefinition: Object type PPBC.PowerProfileDefinition
+        PPBC.ScheduleInstruction: Object type PPBC.ScheduleInstruction
+        PPBC.StartInterruptionInstruction: Object type PPBC.StartInterruptionInstruction
+        PPBC.EndInterruptionInstruction: Object type PPBC.EndInterruptionInstruction
+        OMBC.SystemDescription: Object type OMBC.SystemDescription
+        OMBC.Instruction: Object type OMBC.Instruction
+        FRBC.SystemDescription: Object type FRBC.SystemDescription
+        FRBC.Instruction: Object type FRBC.Instruction
+        DDBC.SystemDescription: Object type DDBC.SystemDescription
+        DDBC.Instruction: Object type DDBC.Instruction
+    EnergyManagementRole:
+      type: string
+      enum: ["CEM", "RM"]
+      description: |
+        CEM: Customer Energy Manager
+        RM: Resource Manager
+    ReceptionStatusValues:
+      type: string
+      enum: ["INVALID_DATA", "INVALID_MESSAGE", "INVALID_CONTENT", "TEMPORARY_ERROR", "PERMANENT_ERROR", "OK"]
+      description: |
+        INVALID_DATA: Message not understood (e.g. not valid JSON, no message_id found). Consequence: Message is ignored, proceed if possible
+        INVALID_MESSAGE: Message was not according to schema. Consequence: Message is ignored, proceed if possible
+        INVALID_CONTENT: Message contents is invalid (e.g. contains a non-existing ID). Somewhat equivalent to BAD_REQUEST in HTTP.. Consequence: Message is ignored, proceed if possible.
+        TEMPORARY_ERROR: Receiver encountered an error. Consequence: Try to send to message again
+        PERMANENT_ERROR: Receiver encountered an error which it cannot recover from. Consequence: Disconnect.
+        OK: Message processed normally. Consequence: Proceed normally.
+    PowerValue:
+      type: object
+      required:
+      - commodity_quantity
+      - value
+      properties:
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: "The power quantity the value refers to"
+        value:
+          type: number
+          description: "Power value expressed in the unit associated with the CommodityQuantity"
+      additionalProperties: false
+    PowerForecastValue:
+      type: object
+      required:
+      - value_expected
+      - commodity_quantity
+      properties:
+        value_upper_limit:
+          type: number
+          description: "The upper boundary of the range with 100 % certainty the power value is in it"
+        value_upper_95PPR:
+          type: number
+          description: "The upper boundary of the range with 95 % certainty the power value is in it"
+        value_upper_68PPR:
+          type: number
+          description: "The upper boundary of the range with 68 % certainty the power value is in it"
+        value_expected:
+          type: number
+          description: "The expected power value."
+        value_lower_68PPR:
+          type: number
+          description: "The lower boundary of the range with 68 % certainty the power value is in it"
+        value_lower_95PPR:
+          type: number
+          description: "The lower boundary of the range with 95 % certainty the power value is in it"
+        value_lower_limit:
+          type: number
+          description: "The lower boundary of the range with 100 % certainty the power value is in it"
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: "The power quantity the value refers to"
+      additionalProperties: false
+    PowerRange:
+      type: object
+      required:
+      - start_of_range
+      - end_of_range
+      - commodity_quantity
+      properties:
+        start_of_range:
+          type: number
+          description: "Power value that defines the start of the range."
+        end_of_range:
+          type: number
+          description: "Power value that defines the end of the range."
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: "The power quantity the values refer to"
+      additionalProperties: false
+    NumberRange:
+      type: object
+      required:
+      - start_of_range
+      - end_of_range
+      properties:
+        start_of_range:
+          type: number
+          description: "Number that defines the start of the range"
+        end_of_range:
+          type: number
+          description: "Number that defines the end of the range"
+      additionalProperties: false
+    Role:
+      type: object
+      required:
+      - role
+      - commodity
+      properties:
+        role:
+          $ref: '#/components/schemas/RoleType'
+          description: "Role type of the Resource Manager for the given commodity"
+        commodity:
+          $ref: '#/components/schemas/Commodity'
+          description: "Commodity the role refers to."
+      additionalProperties: false
+    Transition:
+      type: object
+      required:
+      - id
+      - from
+      - to
+      - start_timers
+      - blocking_timers
+      - abnormal_condition_only
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the Transition. Must be unique in the scope of the OMBC.SystemDescription, FRBC.ActuatorDescription or DDBC.ActuatorDescription in which it is used."
+        from:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the OperationMode (exact type differs per ControlType) that should be switched from."
+        to:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the OperationMode (exact type differs per ControlType) that will be switched to."
+        start_timers:
+          type: array
+          minItems: 0
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/ID'
+          description: "List of IDs of Timers that will be (re)started when this transition is initiated"
+        blocking_timers:
+          type: array
+          minItems: 0
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/ID'
+          description: "List of IDs of Timers that block this Transition from initiating while at least one of these Timers is not yet finished"
+        transition_costs:
+          type: number
+          description: "Absolute costs for going through this Transition in the currency as described in the ResourceManagerDetails."
+        transition_duration:
+          $ref: '#/components/schemas/Duration'
+          description: "Indicates the time between the initiation of this Transition, and the time at which the device behaves according to the Operation Mode which is defined in the ‘to’ data element. When no value is provided it is assumed the transition duration is negligible."
+        abnormal_condition_only:
+          type: boolean
+          description: "Indicates if this Transition may only be used during an abnormal condition (see Clause )"
+      additionalProperties: false
+    Timer:
+      type: object
+      required:
+      - id
+      - duration
+      - finished_at
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the Timer. Must be unique in the scope of the OMBC.SystemDescription, FRBC.ActuatorDescription or DDBC.ActuatorDescription in which it is used."
+        diagnostic_label:
+          type: string
+          description: "Human readable name/description of the Timer. This element is only intended for diagnostic purposes and not for HMI applications."
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: "The time it takes for the Timer to finish after it has been started"
+        finished_at:
+          type: string
+          format: date-time
+          description: "Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past."
+      additionalProperties: false
+    PowerForecastElement:
+      type: object
+      required:
+      - duration
+      - power_values
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: "Duration of the PowerForecastElement"
+        power_values:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/PowerForecastValue'
+          description: "The values of power that are expected for the given period of time. There shall be at least one PowerForecastValue, and at most one PowerForecastValue per CommodityQuantity."
+      additionalProperties: false
+    FRBC.ActuatorDescription:
+      type: object
+      required:
+      - id
+      - supported_commodities
+      - operation_modes
+      - transitions
+      - timers
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the Actuator. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+        diagnostic_label:
+          type: string
+          description: "Human readable name/description for the actuator. This element is only intended for diagnostic purposes and not for HMI applications."
+        supported_commodities:
+          type: array
+          minItems: 1
+          maxItems: 4
+          items:
+            $ref: '#/components/schemas/Commodity'
+          description: "List of all supported Commodities."
+        operation_modes:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/FRBC.OperationMode'
+          description: "Provided FRBC.OperationModes associated with this actuator"
+        transitions:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/Transition'
+          description: "Possible transitions between FRBC.OperationModes associated with this actuator."
+        timers:
+          type: array
+          minItems: 0
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/Timer'
+          description: "List of Timers associated with this actuator"
+      additionalProperties: false
+    FRBC.OperationMode:
+      type: object
+      required:
+      - id
+      - elements
+      - abnormal_condition_only
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+          description: "ID of the FRBC.OperationMode. Must be unique in the scope of the FRBC.ActuatorDescription in which it is used."
+        diagnostic_label:
+          type: string
+          description: "Human readable name/description of the FRBC.OperationMode. This element is only intended for diagnostic purposes and not for HMI applications."
+        elements:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/FRBC.OperationModeElement'
+          description: "List of FRBC.OperationModeElements, which describe the properties of this FRBC.OperationMode depending on the fill_level. The fill_level_ranges of the items in the Array must be contiguous."
+        abnormal_condition_only:
+          type: boolean
+          description: "Indicates if this FRBC.OperationMode may only be used during an abnormal condition"
+      additionalProperties: false
+    FRBC.OperationModeElement:
+      type: object
+      required:
+      - fill_level_range
+      - fill_rate
+      - power_ranges
+      properties:
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: "The range of the fill level for which this FRBC.OperationModeElement applies. The start of the NumberRange shall be smaller than the end of the NumberRange."
+        fill_rate:
+          $ref: '#/components/schemas/NumberRange'
+          description: "Indicates the change in fill_level per second. The lower_boundary of the NumberRange is associated with an operation_mode_factor of 0, the upper_boundary is associated with an operation_mode_factor of 1. "
+        power_ranges:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/PowerRange'
+          description: "The power produced or consumed by this operation mode. The start of each PowerRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1. In the array there must be at least one PowerRange, and at most one PowerRange per CommodityQuantity."
+        running_costs:
+          $ref: '#/components/schemas/NumberRange'
+          description: "Additional costs per second (e.g. wear, services) associated with this operation mode in the currency defined by the ResourceManagerDetails, excluding the commodity cost. The range is expressing uncertainty and is not linked to the operation_mode_factor."
+      additionalProperties: false
+    FRBC.StorageDescription:
+      type: object
+      required:
+      - provides_leakage_behaviour
+      - provides_fill_level_target_profile
+      - provides_usage_forecast
+      - fill_level_range
+      properties:
+        diagnostic_label:
+          type: string
+          description: "Human readable name/description of the storage (e.g. hot water buffer or battery). This element is only intended for diagnostic purposes and not for HMI applications."
+        fill_level_label:
+          type: string
+          description: "Human readable description of the (physical) units associated with the fill_level (e.g. degrees Celsius or percentage state of charge). This element is only intended for diagnostic purposes and not for HMI applications."
+        provides_leakage_behaviour:
+          type: boolean
+          description: "Indicates whether the Storage could provide details of power leakage behaviour through the FRBC.LeakageBehaviour."
+        provides_fill_level_target_profile:
+          type: boolean
+          description: "Indicates whether the Storage could provide a target profile for the fill level through the FRBC.FillLevelTargetProfile."
+        provides_usage_forecast:
+          type: boolean
+          description: "Indicates whether the Storage could provide a UsageForecast through the FRBC.UsageForecast."
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: "The range in which the fill_level should remain. It is expected of the CEM to keep the fill_level within this range. When the fill_level is not within this range, the Resource Manager can ignore instructions from the CEM (except during abnormal conditions). "
+      additionalProperties: false
+    FRBC.LeakageBehaviourElement:
+      type: object
+      required:
+      - fill_level_range
+      - leakage_rate
+      properties:
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: "The fill level range for which this FRBC.LeakageBehaviourElement applies. The start of the range must be less than the end of the range."
+        leakage_rate:
+          type: number
+          description: "Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level."
+      additionalProperties: false
+    FRBC.UsageForecastElement:
+      type: object
+      required:
+      - duration
+      - usage_rate_expected
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: "Indicator for how long the given usage_rate is valid."
+        usage_rate_upper_limit:
+          type: number
+          description: "The upper limit of the range with a 100 % probability that the usage rate is within that range."
+        usage_rate_upper_95PPR:
+          type: number
+          description: "The upper limit of the range with a 95 % probability that the usage rate is within that range. "
+        usage_rate_upper_68PPR:
+          type: number
+          description: "The upper limit of the range with a 68 % probability that the usage rate is within that range"
+        usage_rate_expected:
+          type: number
+          description: "The most likely value for the usage rate; the expected increase or decrease of the fill_level per second"
+        usage_rate_lower_68PPR:
+          type: number
+          description: "The lower limit of the range with a 68 % probability that the usage rate is within that range"
+        usage_rate_lower_95PPR:
+          type: number
+          description: "The lower limit of the range with a 95 % probability that the usage rate is within that range"
+        usage_rate_lower_limit:
+          type: number
+          description: "The lower limit of the range with a 100 % probability that the usage rate is within that range"
+      additionalProperties: false
+    FRBC.FillLevelTargetProfileElement:
+      type: object
+      required:
+      - duration
+      - fill_level_range
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: "The duration of the element."
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: "The target range in which the fill_level must be for the time period during which the element is active. The start of the range must be smaller or equal to the end of the range. The CEM must take best-effort actions to proactively achieve this target."
+      additionalProperties: false
+    RoleType:
+      type: string
+      enum: ["ENERGY_PRODUCER", "ENERGY_CONSUMER", "ENERGY_STORAGE"]
+      description: |
+        ENERGY_PRODUCER: Identifier for RoleType Producer
+        ENERGY_CONSUMER: Identifier for RoleType Consumer
+        ENERGY_STORAGE: Identifier for RoleType Storage
+    Commodity:
+      type: string
+      enum: ["GAS", "HEAT", "ELECTRICITY", "OIL"]
+      description: |
+        GAS: Identifier for Commodity GAS
+        HEAT: Identifier for Commodity HEAT
+        ELECTRICITY: Identifier for Commodity ELECTRICITY
+        OIL: Identifier for Commodity OIL
+    CommodityQuantity:
+      type: string
+      enum: ["ELECTRIC.POWER.L1", "ELECTRIC.POWER.L2", "ELECTRIC.POWER.L3", "ELECTRIC.POWER.3_PHASE_SYMMETRIC", "NATURAL_GAS.FLOW_RATE", "HYDROGEN.FLOW_RATE", "HEAT.TEMPERATURE", "HEAT.FLOW_RATE", "HEAT.THERMAL_POWER", "OIL.FLOW_RATE"]
+      description: |
+        ELECTRIC.POWER.L1: Electric power described in Watt on phase 1. If a device utilizes only one phase it should always use L1.
+        ELECTRIC.POWER.L2: Electric power described in Watt on phase 2. Only applicable for 3 phase devices.
+        ELECTRIC.POWER.L3: Electric power described in Watt on phase 3. Only applicable for 3 phase devices.
+        ELECTRIC.POWER.3_PHASE_SYMMETRIC: Electric power described in Watt on when power is equally shared among the three phases. Only applicable for 3 phase devices.
+        NATURAL_GAS.FLOW_RATE: Gas flow rate described in liters per second
+        HYDROGEN.FLOW_RATE: Gas flow rate described in grams per second
+        HEAT.TEMPERATURE: Heat described in degrees Celsius
+        HEAT.FLOW_RATE: Flow rate of heat carrying gas or liquid in liters per second
+        HEAT.THERMAL_POWER: Thermal power in Watt
+        OIL.FLOW_RATE: Oil flow rate described in liters per hour
+    InstructionStatus:
+      type: string
+      enum: ["NEW", "ACCEPTED", "REJECTED", "REVOKED", "STARTED", "SUCCEEDED", "ABORTED"]
+      description: |
+        NEW: Instruction was newly created
+        ACCEPTED: Instruction has been accepted
+        REJECTED: Instruction was rejected
+        REVOKED: Instruction was revoked
+        STARTED: Instruction was executed
+        SUCCEEDED: Instruction finished successfully
+        ABORTED: Instruction was aborted.
+    ControlType:
+      type: string
+      enum: ["POWER_ENVELOPE_BASED_CONTROL", "POWER_PROFILE_BASED_CONTROL", "OPERATION_MODE_BASED_CONTROL", "FILL_RATE_BASED_CONTROL", "DEMAND_DRIVEN_BASED_CONTROL", "NOT_CONTROLABLE", "NO_SELECTION"]
+      description: |
+        POWER_ENVELOPE_BASED_CONTROL: Identifier for the Power Envelope Based Control type
+        POWER_PROFILE_BASED_CONTROL: Identifier for the Power Profile Based Control type
+        OPERATION_MODE_BASED_CONTROL: Identifier for the Operation Mode Based Control type
+        FILL_RATE_BASED_CONTROL: Identifier for the Demand Driven Based Control type
+        DEMAND_DRIVEN_BASED_CONTROL: Identifier for the Fill Rate Based Control type
+        NOT_CONTROLABLE: Identifier that is to be used if no control is possible. Resources of this type can still provide measurements and forecast
+        NO_SELECTION: Identifier that is to be used if no control type is or has been selected. 
+  messages:
+    SelectControlType:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - control_type
+        properties:
+          message_type:
+            type: string
+            const: "SelectControlType"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          control_type:
+            $ref: '#/components/schemas/ControlType'
+            description: "The ControlType to activate. Must be one of the available ControlTypes as defined in the ResourceManagerDetails"
+        additionalProperties: false
+    SessionRequest:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - request
+        properties:
+          message_type:
+            type: string
+            const: "SessionRequest"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          request:
+            $ref: '#/components/schemas/SessionRequestType'
+            description: "The type of request"
+          diagnostic_label:
+            type: string
+            description: "Optional field for a human readible descirption for debugging purposes"
+        additionalProperties: false
+    RevokeObject:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - object_type
+        - object_id
+        properties:
+          message_type:
+            type: string
+            const: "RevokeObject"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          object_type:
+            $ref: '#/components/schemas/RevokableObjects'
+            description: "The type of object that needs to be revoked"
+          object_id:
+            $ref: '#/components/schemas/ID'
+            description: "The ID of object that needs to be revoked"
+        additionalProperties: false
+    Handshake:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - role
+        properties:
+          message_type:
+            type: string
+            const: "Handshake"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          role:
+            $ref: '#/components/schemas/EnergyManagementRole'
+            description: "The role of the sender of this message"
+          supported_protocol_versions:
+            type: array
+            minItems: 1
+            items:
+              type: string
+            description: "Protocol versions supported by the sender of this message. This field is mandatory for the RM, but optional for the CEM."
+        additionalProperties: false
+    HandshakeResponse:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - selected_protocol_version
+        properties:
+          message_type:
+            type: string
+            const: "HandshakeResponse"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          selected_protocol_version:
+            type: string
+            description: "The protocol version the CEM selected for this session"
+        additionalProperties: false
+    ResourceManagerDetails:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - resource_id
+        - roles
+        - instruction_processing_delay
+        - available_control_types
+        - provides_forecast
+        - provides_power_measurement_types
+        properties:
+          message_type:
+            type: string
+            const: "ResourceManagerDetails"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          resource_id:
+            $ref: '#/components/schemas/ID'
+            description: "Identifier of the Resource Manager. Must be unique within the scope of the CEM."
+          name:
+            type: string
+            description: "Human readable name given by user"
+          roles:
+            type: array
+            minItems: 1
+            maxItems: 3
+            items:
+              $ref: '#/components/schemas/Role'
+            description: "Each Resource Manager provides one or more energy Roles"
+          manufacturer:
+            type: string
+            description: "Name of Manufacturer"
+          model:
+            type: string
+            description: "Name of the model of the device (provided by the manufacturer)"
+          serial_number:
+            type: string
+            description: "Serial number of the device (provided by the manufacturer)"
+          firmware_version:
+            type: string
+            description: "Version identifier of the firmware used in the device (provided by the manufacturer)"
+          instruction_processing_delay:
+            $ref: '#/components/schemas/Duration'
+            description: "The average time the combination of Resource Manager and HBES/BACS/SASS or (Smart) device needs to process and execute an instruction"
+          available_control_types:
+            type: array
+            minItems: 1
+            maxItems: 5
+            items:
+              $ref: '#/components/schemas/ControlType'
+            description: "The control types supported by this Resource Manager."
+          currency:
+            $ref: '#/components/schemas/Currency'
+            description: "Currency to be used for all information regarding costs. Mandatory if cost information is published."
+          provides_forecast:
+            type: boolean
+            description: "Indicates whether the ResourceManager is able to provide PowerForecasts"
+          provides_power_measurement_types:
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/CommodityQuantity'
+            description: "Array of all CommodityQuantities that this Resource Manager can provide measurements for. "
+        additionalProperties: false
+    PowerMeasurement:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - measurement_timestamp
+        - values
+        properties:
+          message_type:
+            type: string
+            const: "PowerMeasurement"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          measurement_timestamp:
+            type: string
+            format: date-time
+            description: "Timestamp when PowerValues were measured."
+          values:
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/PowerValue'
+            description: "Array of measured PowerValues. Must contain at least one item and at most one item per ‘commodity_quantity’ (defined inside the PowerValue)."
+        additionalProperties: false
+    ReceptionStatus:
+      payload:
+        type: object
+        required:
+        - message_type
+        - subject_message_id
+        - status
+        properties:
+          message_type:
+            type: string
+            const: "ReceptionStatus"
+          subject_message_id:
+            $ref: '#/components/schemas/ID'
+            description: "The message this ReceptionStatus refers to"
+          status:
+            $ref: '#/components/schemas/ReceptionStatusValues'
+            description: "Enumeration of status values"
+          diagnostic_label:
+            type: string
+            description: "Diagnostic label that can be used to provide additional information for debugging. However, not for HMI purposes."
+        additionalProperties: false
+    InstructionStatusUpdate:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - instruction_id
+        - status_type
+        - timestamp
+        properties:
+          message_type:
+            type: string
+            const: "InstructionStatusUpdate"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          instruction_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of this instruction (as provided by the CEM) "
+          status_type:
+            $ref: '#/components/schemas/InstructionStatus'
+            description: "Present status of this instruction."
+          timestamp:
+            type: string
+            format: date-time
+            description: "Timestamp when status_type has changed the last time."
+        additionalProperties: false
+    PowerForecast:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - start_time
+        - elements
+        properties:
+          message_type:
+            type: string
+            const: "PowerForecast"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          start_time:
+            type: string
+            format: date-time
+            description: "Start time of time period that is covered by the profile."
+          elements:
+            type: array
+            minItems: 1
+            maxItems: 288
+            items:
+              $ref: '#/components/schemas/PowerForecastElement'
+            description: "Elements of which this forecast consists. Contains at least one element. Elements must be placed in chronological order."
+        additionalProperties: false
+    FRBC.SystemDescription:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - valid_from
+        - actuators
+        - storage
+        properties:
+          message_type:
+            type: string
+            const: "FRBC.SystemDescription"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          valid_from:
+            type: string
+            format: date-time
+            description: "Moment this FRBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past."
+          actuators:
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/FRBC.ActuatorDescription'
+            description: "Details of all Actuators."
+          storage:
+            $ref: '#/components/schemas/FRBC.StorageDescription'
+            description: "Details of the storage."
+        additionalProperties: false
+    FRBC.ActuatorStatus:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - active_operation_mode_id
+        - operation_mode_factor
+        properties:
+          message_type:
+            type: string
+            const: "FRBC.ActuatorStatus"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          active_operation_mode_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the FRBC.OperationMode that is presently active."
+          operation_mode_factor:
+            type: number
+            description: "The number indicates the factor with which the FRBC.OperationMode is configured. The factor should be greater than or equal than 0 and less or equal to 1."
+          previous_operation_mode_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the FRBC.OperationMode that was active before the present one. This value shall always be provided, unless the active FRBC.OperationMode is the first FRBC.OperationMode the Resource Manager is aware of."
+          transition_timestamp:
+            type: string
+            format: date-time
+            description: "Time at which the transition from the previous FRBC.OperationMode to the active FRBC.OperationMode was initiated. This value shall always be provided, unless the active FRBC.OperationMode is the first FRBC.OperationMode the Resource Manager is aware of."
+        additionalProperties: false
+    FRBC.StorageStatus:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - present_fill_level
+        properties:
+          message_type:
+            type: string
+            const: "FRBC.StorageStatus"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          present_fill_level:
+            type: number
+            description: "Present fill level of the Storage"
+        additionalProperties: false
+    FRBC.LeakageBehaviour:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - valid_from
+        - elements
+        properties:
+          message_type:
+            type: string
+            const: "FRBC.LeakageBehaviour"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          valid_from:
+            type: string
+            format: date-time
+            description: "Moment this FRBC.LeakageBehaviour starts to be valid. If the FRBC.LeakageBehaviour is immediately valid, the DateTimeStamp should be now or in the past."
+          elements:
+            type: array
+            minItems: 1
+            maxItems: 288
+            items:
+              $ref: '#/components/schemas/FRBC.LeakageBehaviourElement'
+            description: "List of elements that model the leakage behaviour of the buffer. The fill_level_ranges of the elements must be contiguous."
+        additionalProperties: false
+    FRBC.Instruction:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - id
+        - actuator_id
+        - operation_mode
+        - operation_mode_factor
+        - execution_time
+        - abnormal_condition
+        properties:
+          message_type:
+            type: string
+            const: "FRBC.Instruction"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+          actuator_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the actuator this instruction belongs to."
+          operation_mode:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the FRBC.OperationMode that should be activated."
+          operation_mode_factor:
+            type: number
+            description: "The number indicates the factor with which the FRBC.OperationMode should be configured. The factor should be greater than or equal to 0 and less or equal to 1."
+          execution_time:
+            type: string
+            format: date-time
+            description: "Time when instruction should be executed."
+          abnormal_condition:
+            type: boolean
+            description: "Indicates if this is an instruction during an abnormal condition."
+        additionalProperties: false
+    FRBC.UsageForecast:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - start_time
+        - elements
+        properties:
+          message_type:
+            type: string
+            const: "FRBC.UsageForecast"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          start_time:
+            type: string
+            format: date-time
+            description: "Time at which the FRBC.UsageForecast starts."
+          elements:
+            type: array
+            minItems: 1
+            maxItems: 288
+            items:
+              $ref: '#/components/schemas/FRBC.UsageForecastElement'
+            description: "Further elements that model the profile. There shall be at least one element. Elements must be placed in chronological order."
+        additionalProperties: false
+    FRBC.FillLevelTargetProfile:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - start_time
+        - elements
+        properties:
+          message_type:
+            type: string
+            const: "FRBC.FillLevelTargetProfile"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          start_time:
+            type: string
+            format: date-time
+            description: "Time at which the FRBC.FillLevelTargetProfile starts."
+          elements:
+            type: array
+            minItems: 1
+            maxItems: 288
+            items:
+              $ref: '#/components/schemas/FRBC.FillLevelTargetProfileElement'
+            description: "List of different fill levels that have to be targeted within a given duration. There shall be at least one element. Elements must be placed in chronological order."
+        additionalProperties: false

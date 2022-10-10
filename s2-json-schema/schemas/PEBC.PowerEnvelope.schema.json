@@ -1,0 +1,26 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.PowerEnvelope.schema.json",
+	"title": "PEBC_PowerEnvelope",
+	"properties": {
+		"id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "Identifier of this PEBC.PowerEnvelope. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+		},
+		"commodity_quantity": {
+			"$ref": "../schemas/CommodityQuantity.schema.json",
+			"description": "Type of power quantity this PEBC.PowerEnvelope applies to"
+		},
+		"power_envelope_elements": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 288,
+			"items": {
+				"$ref": "../schemas/PEBC.PowerEnvelopeElement.schema.json"
+			},
+			"description": "The elements of this PEBC.PowerEnvelope. Shall contain at least one element. Elements must be placed in chronological order."
+		}
+	},
+	"required": ["id", "commodity_quantity", "power_envelope_elements"],
+	"additionalProperties": false
+}

@@ -1,0 +1,34 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/OMBC.OperationMode.schema.json",
+	"title": "OMBC_OperationMode",
+	"properties": {
+		"id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of the OBMC.OperationMode. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+		},
+		"diagnostic_label": {
+			"type": "string",
+			"description": "Human readable name/description of the OMBC.OperationMode. This element is only intended for diagnostic purposes and not for HMI applications."
+		},
+		"power_ranges": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 10,
+			"items": {
+				"$ref": "../schemas/PowerRange.schema.json"
+			},
+			"description": "The power produced or consumed by this operation mode. The start of each PowerRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1. In the array there must be at least one PowerRange, and at most one PowerRange per CommodityQuantity."
+		},
+		"running_costs": {
+			"$ref": "../schemas/NumberRange.schema.json",
+			"description": "Additional costs per second (e.g. wear, services) associated with this operation mode in the currency defined by the ResourceManagerDetails , excluding the commodity cost. The range is expressing uncertainty and is not linked to the operation_mode_factor."
+		},
+		"abnormal_condition_only": {
+			"type": "boolean",
+			"description": "Indicates if this OMBC.OperationMode may only be used during an abnormal condition."
+		}
+	},
+	"required": ["id", "power_ranges", "abnormal_condition_only"],
+	"additionalProperties": false
+}

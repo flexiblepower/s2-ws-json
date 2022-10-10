@@ -1,0 +1,17 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/NumberRange.schema.json",
+	"title": "NumberRange",
+	"properties": {
+		"start_of_range": {
+			"type": "number",
+			"description": "Number that defines the start of the range"
+		},
+		"end_of_range": {
+			"type": "number",
+			"description": "Number that defines the end of the range"
+		}
+	},
+	"required": ["start_of_range", "end_of_range"],
+	"additionalProperties": false
+}

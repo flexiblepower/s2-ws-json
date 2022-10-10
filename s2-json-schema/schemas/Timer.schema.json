@@ -1,0 +1,26 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/Timer.schema.json",
+	"title": "Timer",
+	"properties": {
+		"id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "ID of the Timer. Must be unique in the scope of the OMBC.SystemDescription, FRBC.ActuatorDescription or DDBC.ActuatorDescription in which it is used."
+		},
+		"diagnostic_label": {
+			"type": "string",
+			"description": "Human readable name/description of the Timer. This element is only intended for diagnostic purposes and not for HMI applications."
+		},
+		"duration": {
+			"$ref": "../schemas/Duration.schema.json",
+			"description": "The time it takes for the Timer to finish after it has been started"
+		},
+		"finished_at": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past."
+		}
+	},
+	"required": ["id", "duration", "finished_at"],
+	"additionalProperties": false
+}

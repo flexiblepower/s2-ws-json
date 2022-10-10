@@ -1,0 +1,25 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/ReceptionStatus.schema.json",
+	"title": "ReceptionStatus",
+	"properties": {
+		"message_type": {
+			"type": "string",
+			"const": "ReceptionStatus"
+		},
+		"subject_message_id": {
+			"$ref": "../schemas/ID.schema.json",
+			"description": "The message this ReceptionStatus refers to"
+		},
+		"status": {
+			"$ref": "../schemas/ReceptionStatusValues.schema.json",
+			"description": "Enumeration of status values"
+		},
+		"diagnostic_label": {
+			"type": "string",
+			"description": "Diagnostic label that can be used to provide additional information for debugging. However, not for HMI purposes."
+		}
+	},
+	"required": ["message_type", "subject_message_id", "status"],
+	"additionalProperties": false
+}
