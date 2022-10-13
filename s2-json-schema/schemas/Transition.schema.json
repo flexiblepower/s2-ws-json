@@ -1,51 +1,51 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/Transition.schema.json",
-	"title": "Transition",
-	"properties": {
-		"id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the Transition. Must be unique in the scope of the OMBC.SystemDescription, FRBC.ActuatorDescription or DDBC.ActuatorDescription in which it is used."
-		},
-		"from": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the OperationMode (exact type differs per ControlType) that should be switched from."
-		},
-		"to": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the OperationMode (exact type differs per ControlType) that will be switched to."
-		},
-		"start_timers": {
-			"type": "array",
-			"minItems": 0,
-			"maxItems": 1000,
-			"items": {
-				"$ref": "../schemas/ID.schema.json"
-			},
-			"description": "List of IDs of Timers that will be (re)started when this transition is initiated"
-		},
-		"blocking_timers": {
-			"type": "array",
-			"minItems": 0,
-			"maxItems": 1000,
-			"items": {
-				"$ref": "../schemas/ID.schema.json"
-			},
-			"description": "List of IDs of Timers that block this Transition from initiating while at least one of these Timers is not yet finished"
-		},
-		"transition_costs": {
-			"type": "number",
-			"description": "Absolute costs for going through this Transition in the currency as described in the ResourceManagerDetails."
-		},
-		"transition_duration": {
-			"$ref": "../schemas/Duration.schema.json",
-			"description": "Indicates the time between the initiation of this Transition, and the time at which the device behaves according to the Operation Mode which is defined in the ‘to’ data element. When no value is provided it is assumed the transition duration is negligible."
-		},
-		"abnormal_condition_only": {
-			"type": "boolean",
-			"description": "Indicates if this Transition may only be used during an abnormal condition (see Clause )"
-		}
-	},
-	"required": ["id", "from", "to", "start_timers", "blocking_timers", "abnormal_condition_only"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/Transition.schema.json",
+    "title": "Transition",
+    "properties": {
+        "id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the Transition. Must be unique in the scope of the OMBC.SystemDescription, FRBC.ActuatorDescription or DDBC.ActuatorDescription in which it is used."
+        },
+        "from": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the OperationMode (exact type differs per ControlType) that should be switched from."
+        },
+        "to": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the OperationMode (exact type differs per ControlType) that will be switched to."
+        },
+        "start_timers": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1000,
+            "items": {
+                "$ref": "../schemas/ID.schema.json"
+            },
+            "description": "List of IDs of Timers that will be (re)started when this transition is initiated"
+        },
+        "blocking_timers": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1000,
+            "items": {
+                "$ref": "../schemas/ID.schema.json"
+            },
+            "description": "List of IDs of Timers that block this Transition from initiating while at least one of these Timers is not yet finished"
+        },
+        "transition_costs": {
+            "type": "number",
+            "description": "Absolute costs for going through this Transition in the currency as described in the ResourceManagerDetails."
+        },
+        "transition_duration": {
+            "$ref": "../schemas/Duration.schema.json",
+            "description": "Indicates the time between the initiation of this Transition, and the time at which the device behaves according to the Operation Mode which is defined in the ‘to’ data element. When no value is provided it is assumed the transition duration is negligible."
+        },
+        "abnormal_condition_only": {
+            "type": "boolean",
+            "description": "Indicates if this Transition may only be used during an abnormal condition (see Clause )"
+        }
+    },
+    "required": ["id", "from", "to", "start_timers", "blocking_timers", "abnormal_condition_only"],
+    "additionalProperties": false
 }

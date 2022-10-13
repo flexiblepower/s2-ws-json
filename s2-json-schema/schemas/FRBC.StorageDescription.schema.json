@@ -1,33 +1,33 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/FRBC.StorageDescription.schema.json",
-	"title": "FRBC_StorageDescription",
-	"properties": {
-		"diagnostic_label": {
-			"type": "string",
-			"description": "Human readable name/description of the storage (e.g. hot water buffer or battery). This element is only intended for diagnostic purposes and not for HMI applications."
-		},
-		"fill_level_label": {
-			"type": "string",
-			"description": "Human readable description of the (physical) units associated with the fill_level (e.g. degrees Celsius or percentage state of charge). This element is only intended for diagnostic purposes and not for HMI applications."
-		},
-		"provides_leakage_behaviour": {
-			"type": "boolean",
-			"description": "Indicates whether the Storage could provide details of power leakage behaviour through the FRBC.LeakageBehaviour."
-		},
-		"provides_fill_level_target_profile": {
-			"type": "boolean",
-			"description": "Indicates whether the Storage could provide a target profile for the fill level through the FRBC.FillLevelTargetProfile."
-		},
-		"provides_usage_forecast": {
-			"type": "boolean",
-			"description": "Indicates whether the Storage could provide a UsageForecast through the FRBC.UsageForecast."
-		},
-		"fill_level_range": {
-			"$ref": "../schemas/NumberRange.schema.json",
-			"description": "The range in which the fill_level should remain. It is expected of the CEM to keep the fill_level within this range. When the fill_level is not within this range, the Resource Manager can ignore instructions from the CEM (except during abnormal conditions). "
-		}
-	},
-	"required": ["provides_leakage_behaviour", "provides_fill_level_target_profile", "provides_usage_forecast", "fill_level_range"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/FRBC.StorageDescription.schema.json",
+    "title": "FRBC_StorageDescription",
+    "properties": {
+        "diagnostic_label": {
+            "type": "string",
+            "description": "Human readable name/description of the storage (e.g. hot water buffer or battery). This element is only intended for diagnostic purposes and not for HMI applications."
+        },
+        "fill_level_label": {
+            "type": "string",
+            "description": "Human readable description of the (physical) units associated with the fill_level (e.g. degrees Celsius or percentage state of charge). This element is only intended for diagnostic purposes and not for HMI applications."
+        },
+        "provides_leakage_behaviour": {
+            "type": "boolean",
+            "description": "Indicates whether the Storage could provide details of power leakage behaviour through the FRBC.LeakageBehaviour."
+        },
+        "provides_fill_level_target_profile": {
+            "type": "boolean",
+            "description": "Indicates whether the Storage could provide a target profile for the fill level through the FRBC.FillLevelTargetProfile."
+        },
+        "provides_usage_forecast": {
+            "type": "boolean",
+            "description": "Indicates whether the Storage could provide a UsageForecast through the FRBC.UsageForecast."
+        },
+        "fill_level_range": {
+            "$ref": "../schemas/NumberRange.schema.json",
+            "description": "The range in which the fill_level should remain. It is expected of the CEM to keep the fill_level within this range. When the fill_level is not within this range, the Resource Manager can ignore instructions from the CEM (except during abnormal conditions). "
+        }
+    },
+    "required": ["provides_leakage_behaviour", "provides_fill_level_target_profile", "provides_usage_forecast", "fill_level_range"],
+    "additionalProperties": false
 }

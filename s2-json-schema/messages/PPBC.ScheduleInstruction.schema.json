@@ -1,42 +1,42 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/PPBC.ScheduleInstruction.schema.json",
-	"title": "PPBC_ScheduleInstruction",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "PPBC.ScheduleInstruction"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
-		},
-		"power_profile_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence is being selected and scheduled by the CEM."
-		},
-		"sequence_container_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence is being selected and scheduled by the CEM."
-		},
-		"power_sequence_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the PPBC.PowerSequence that is being selected and scheduled by the CEM."
-		},
-		"execution_time": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Start time of the PPBC.PowerSequence."
-		},
-		"abnormal_condition": {
-			"type": "boolean",
-			"description": "Indicates if this is an instruction during an abnormal condition"
-		}
-	},
-	"required": ["message_type", "message_id", "id", "power_profile_id", "sequence_container_id", "power_sequence_id", "execution_time", "abnormal_condition"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/PPBC.ScheduleInstruction.schema.json",
+    "title": "PPBC_ScheduleInstruction",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "PPBC.ScheduleInstruction"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+        },
+        "power_profile_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence is being selected and scheduled by the CEM."
+        },
+        "sequence_container_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence is being selected and scheduled by the CEM."
+        },
+        "power_sequence_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the PPBC.PowerSequence that is being selected and scheduled by the CEM."
+        },
+        "execution_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start time of the PPBC.PowerSequence."
+        },
+        "abnormal_condition": {
+            "type": "boolean",
+            "description": "Indicates if this is an instruction during an abnormal condition"
+        }
+    },
+    "required": ["message_type", "message_id", "id", "power_profile_id", "sequence_container_id", "power_sequence_id", "execution_time", "abnormal_condition"],
+    "additionalProperties": false
 }

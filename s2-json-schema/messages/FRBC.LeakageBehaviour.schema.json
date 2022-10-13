@@ -1,31 +1,31 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/FRBC.LeakageBehaviour.schema.json",
-	"title": "FRBC_LeakageBehaviour",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "FRBC.LeakageBehaviour"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"valid_from": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Moment this FRBC.LeakageBehaviour starts to be valid. If the FRBC.LeakageBehaviour is immediately valid, the DateTimeStamp should be now or in the past."
-		},
-		"elements": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 288,
-			"items": {
-				"$ref": "../schemas/FRBC.LeakageBehaviourElement.schema.json"
-			},
-			"description": "List of elements that model the leakage behaviour of the buffer. The fill_level_ranges of the elements must be contiguous."
-		}
-	},
-	"required": ["message_type", "message_id", "valid_from", "elements"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/FRBC.LeakageBehaviour.schema.json",
+    "title": "FRBC_LeakageBehaviour",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "FRBC.LeakageBehaviour"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "valid_from": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Moment this FRBC.LeakageBehaviour starts to be valid. If the FRBC.LeakageBehaviour is immediately valid, the DateTimeStamp should be now or in the past."
+        },
+        "elements": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 288,
+            "items": {
+                "$ref": "../schemas/FRBC.LeakageBehaviourElement.schema.json"
+            },
+            "description": "List of elements that model the leakage behaviour of the buffer. The fill_level_ranges of the elements must be contiguous."
+        }
+    },
+    "required": ["message_type", "message_id", "valid_from", "elements"],
+    "additionalProperties": false
 }

@@ -1,29 +1,29 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/Handshake.schema.json",
-	"title": "Handshake",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "Handshake"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"role": {
-			"$ref": "../schemas/EnergyManagementRole.schema.json",
-			"description": "The role of the sender of this message"
-		},
-		"supported_protocol_versions": {
-			"type": "array",
-			"minItems": 1,
-			"items": {
-				"type": "string"
-			},
-			"description": "Protocol versions supported by the sender of this message. This field is mandatory for the RM, but optional for the CEM."
-		}
-	},
-	"required": ["message_type", "message_id", "role"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/Handshake.schema.json",
+    "title": "Handshake",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "Handshake"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "role": {
+            "$ref": "../schemas/EnergyManagementRole.schema.json",
+            "description": "The role of the sender of this message"
+        },
+        "supported_protocol_versions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "string"
+            },
+            "description": "Protocol versions supported by the sender of this message. This field is mandatory for the RM, but optional for the CEM."
+        }
+    },
+    "required": ["message_type", "message_id", "role"],
+    "additionalProperties": false
 }

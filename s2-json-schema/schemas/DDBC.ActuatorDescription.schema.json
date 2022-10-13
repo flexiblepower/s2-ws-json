@@ -1,53 +1,53 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/DDBC.ActuatorDescription.schema.json",
-	"title": "DDBC_ActuatorDescription",
-	"properties": {
-		"id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this DDBC.ActuatorDescription. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
-		},
-		"diagnostic_label": {
-			"type": "string",
-			"description": "Human readable name/description of the actuator. This element is only intended for diagnostic purposes and not for HMI applications."
-		},
-		"supported_commodites": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 4,
-			"items": {
-				"$ref": "../schemas/Commodity.schema.json"
-			},
-			"description": "Commodities supported by the operation modes of this actuator. There shall be at least one commodity"
-		},
-		"operation_modes": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 100,
-			"items": {
-				"$ref": "../schemas/DDBC.OperationMode.schema.json"
-			},
-			"description": "List of all Operation Modes that are available for this actuator. There shall be at least one DDBC.OperationMode."
-		},
-		"transitions": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 1000,
-			"items": {
-				"$ref": "../schemas/Transition.schema.json"
-			},
-			"description": "List of Transitions between Operation Modes. Shall contain at least one Transition."
-		},
-		"timers": {
-			"type": "array",
-			"minItems": 0,
-			"maxItems": 1000,
-			"items": {
-				"$ref": "../schemas/Timer.schema.json"
-			},
-			"description": "List of Timers associated with Transitions for this Actuator. Can be empty."
-		}
-	},
-	"required": ["id", "supported_commodites", "operation_modes", "transitions", "timers"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/DDBC.ActuatorDescription.schema.json",
+    "title": "DDBC_ActuatorDescription",
+    "properties": {
+        "id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this DDBC.ActuatorDescription. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+        },
+        "diagnostic_label": {
+            "type": "string",
+            "description": "Human readable name/description of the actuator. This element is only intended for diagnostic purposes and not for HMI applications."
+        },
+        "supported_commodites": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+                "$ref": "../schemas/Commodity.schema.json"
+            },
+            "description": "Commodities supported by the operation modes of this actuator. There shall be at least one commodity"
+        },
+        "operation_modes": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+                "$ref": "../schemas/DDBC.OperationMode.schema.json"
+            },
+            "description": "List of all Operation Modes that are available for this actuator. There shall be at least one DDBC.OperationMode."
+        },
+        "transitions": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "items": {
+                "$ref": "../schemas/Transition.schema.json"
+            },
+            "description": "List of Transitions between Operation Modes. Shall contain at least one Transition."
+        },
+        "timers": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1000,
+            "items": {
+                "$ref": "../schemas/Timer.schema.json"
+            },
+            "description": "List of Timers associated with Transitions for this Actuator. Can be empty."
+        }
+    },
+    "required": ["id", "supported_commodites", "operation_modes", "transitions", "timers"],
+    "additionalProperties": false
 }

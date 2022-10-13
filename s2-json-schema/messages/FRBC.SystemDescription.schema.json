@@ -1,35 +1,35 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/FRBC.SystemDescription.schema.json",
-	"title": "FRBC_SystemDescription",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "FRBC.SystemDescription"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"valid_from": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Moment this FRBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past."
-		},
-		"actuators": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 10,
-			"items": {
-				"$ref": "../schemas/FRBC.ActuatorDescription.schema.json"
-			},
-			"description": "Details of all Actuators."
-		},
-		"storage": {
-			"$ref": "../schemas/FRBC.StorageDescription.schema.json",
-			"description": "Details of the storage."
-		}
-	},
-	"required": ["message_type", "message_id", "valid_from", "actuators", "storage"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/FRBC.SystemDescription.schema.json",
+    "title": "FRBC_SystemDescription",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "FRBC.SystemDescription"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "valid_from": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Moment this FRBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past."
+        },
+        "actuators": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+                "$ref": "../schemas/FRBC.ActuatorDescription.schema.json"
+            },
+            "description": "Details of all Actuators."
+        },
+        "storage": {
+            "$ref": "../schemas/FRBC.StorageDescription.schema.json",
+            "description": "Details of the storage."
+        }
+    },
+    "required": ["message_type", "message_id", "valid_from", "actuators", "storage"],
+    "additionalProperties": false
 }

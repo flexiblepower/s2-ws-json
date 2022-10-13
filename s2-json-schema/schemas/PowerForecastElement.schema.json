@@ -1,22 +1,22 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PowerForecastElement.schema.json",
-	"title": "PowerForecastElement",
-	"properties": {
-		"duration": {
-			"$ref": "../schemas/Duration.schema.json",
-			"description": "Duration of the PowerForecastElement"
-		},
-		"power_values": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 10,
-			"items": {
-				"$ref": "../schemas/PowerForecastValue.schema.json"
-			},
-			"description": "The values of power that are expected for the given period of time. There shall be at least one PowerForecastValue, and at most one PowerForecastValue per CommodityQuantity."
-		}
-	},
-	"required": ["duration", "power_values"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PowerForecastElement.schema.json",
+    "title": "PowerForecastElement",
+    "properties": {
+        "duration": {
+            "$ref": "../schemas/Duration.schema.json",
+            "description": "Duration of the PowerForecastElement"
+        },
+        "power_values": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+                "$ref": "../schemas/PowerForecastValue.schema.json"
+            },
+            "description": "The values of power that are expected for the given period of time. There shall be at least one PowerForecastValue, and at most one PowerForecastValue per CommodityQuantity."
+        }
+    },
+    "required": ["duration", "power_values"],
+    "additionalProperties": false
 }

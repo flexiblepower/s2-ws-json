@@ -1,22 +1,22 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PPBC.PowerSequenceContainer.schema.json",
-	"title": "PPBC_PowerSequenceContainer",
-	"properties": {
-		"id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the PPBC.PowerSequenceContainer. Must be unique in the scope of the PPBC.PowerProfileDefinition in which it is used."
-		},
-		"power_sequences": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 288,
-			"items": {
-				"$ref": "../schemas/PPBC.PowerSequence.schema.json"
-			},
-			"description": "List of alternative Sequences where one could be chosen by the CEM"
-		}
-	},
-	"required": ["id", "power_sequences"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PPBC.PowerSequenceContainer.schema.json",
+    "title": "PPBC_PowerSequenceContainer",
+    "properties": {
+        "id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the PPBC.PowerSequenceContainer. Must be unique in the scope of the PPBC.PowerProfileDefinition in which it is used."
+        },
+        "power_sequences": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 288,
+            "items": {
+                "$ref": "../schemas/PPBC.PowerSequence.schema.json"
+            },
+            "description": "List of alternative Sequences where one could be chosen by the CEM"
+        }
+    },
+    "required": ["id", "power_sequences"],
+    "additionalProperties": false
 }

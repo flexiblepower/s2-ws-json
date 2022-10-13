@@ -1,21 +1,21 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.PowerEnvelopeElement.schema.json",
-	"title": "PEBC_PowerEnvelopeElement",
-	"properties": {
-		"duration": {
-			"$ref": "../schemas/Duration.schema.json",
-			"description": "The duration of the element"
-		},
-		"upper_limit": {
-			"type": "number",
-			"description": "Upper power limit according to the commodity_quantity of the containing PEBC.PowerEnvelope. The lower_limit must be smaller or equal to the upper_limit. The Resource Manager is requested to keep the power values for the given commodity quantity equal to or below the upper_limit. The upper_limit shall be in accordance with the constraints provided by the Resource Manager through any PEBC.AllowedLimitRange with limit_type UPPER_LIMIT."
-		},
-		"lower_limit": {
-			"type": "number",
-			"description": "Lower power limit according to the commodity_quantity of the containing PEBC.PowerEnvelope. The lower_limit must be smaller or equal to the upper_limit. The Resource Manager is requested to keep the power values for the given commodity quantity equal to or above the lower_limit. The lower_limit shall be in accordance with the constraints provided by the Resource Manager through any PEBC.AllowedLimitRange with limit_type LOWER_LIMIT."
-		}
-	},
-	"required": ["duration", "upper_limit", "lower_limit"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.PowerEnvelopeElement.schema.json",
+    "title": "PEBC_PowerEnvelopeElement",
+    "properties": {
+        "duration": {
+            "$ref": "../schemas/Duration.schema.json",
+            "description": "The duration of the element"
+        },
+        "upper_limit": {
+            "type": "number",
+            "description": "Upper power limit according to the commodity_quantity of the containing PEBC.PowerEnvelope. The lower_limit must be smaller or equal to the upper_limit. The Resource Manager is requested to keep the power values for the given commodity quantity equal to or below the upper_limit. The upper_limit shall be in accordance with the constraints provided by the Resource Manager through any PEBC.AllowedLimitRange with limit_type UPPER_LIMIT."
+        },
+        "lower_limit": {
+            "type": "number",
+            "description": "Lower power limit according to the commodity_quantity of the containing PEBC.PowerEnvelope. The lower_limit must be smaller or equal to the upper_limit. The Resource Manager is requested to keep the power values for the given commodity quantity equal to or above the lower_limit. The lower_limit shall be in accordance with the constraints provided by the Resource Manager through any PEBC.AllowedLimitRange with limit_type LOWER_LIMIT."
+        }
+    },
+    "required": ["duration", "upper_limit", "lower_limit"],
+    "additionalProperties": false
 }

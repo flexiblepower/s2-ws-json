@@ -1,7 +1,7 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.PowerEnvelopeConsequenceType.schema.json",
-	"title": "PEBC_PowerEnvelopeConsequenceType",
-	"enum": ["VANISH", "DEFER"],
-	"description": "VANISH: Indicating that the limited load or generated will be lost and not reappear in the future (see Clause 7.6.2)\nDEFER: Indicating that the limited load or generation will be postponed to a later moment (see Clause 7.6.2)"
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.PowerEnvelopeConsequenceType.schema.json",
+    "title": "PEBC_PowerEnvelopeConsequenceType",
+    "enum": ["VANISH", "DEFER"],
+    "description": "VANISH: Indicating that the limited load or generated will be lost and not reappear in the future (see Clause 7.6.2)\nDEFER: Indicating that the limited load or generation will be postponed to a later moment (see Clause 7.6.2)"
 }

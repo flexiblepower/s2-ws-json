@@ -1,34 +1,34 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/DDBC.ActuatorStatus.schema.json",
-	"title": "DDBC_ActuatorStatus",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "DDBC.ActuatorStatus"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"active_operation_mode_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "The operation mode that is presently active for this actuator."
-		},
-		"operation_mode_factor": {
-			"type": "number",
-			"description": "The number indicates the factor with which the DDBC.OperationMode is configured. The factor should be greater than or equal to 0 and less or equal to 1."
-		},
-		"previous_operation_mode_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the DDBC,OperationMode that was active before the present one. This value shall always be provided, unless the active DDBC.OperationMode is the first DDBC.OperationMode the Resource Manager is aware of."
-		},
-		"transition_timestamp": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Time at which the transition from the previous DDBC.OperationMode to the active DDBC.OperationMode was initiated. This value shall always be provided, unless the active DDBC.OperationMode is the first DDBC.OperationMode the Resource Manager is aware of."
-		}
-	},
-	"required": ["message_type", "message_id", "active_operation_mode_id", "operation_mode_factor"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/DDBC.ActuatorStatus.schema.json",
+    "title": "DDBC_ActuatorStatus",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "DDBC.ActuatorStatus"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "active_operation_mode_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "The operation mode that is presently active for this actuator."
+        },
+        "operation_mode_factor": {
+            "type": "number",
+            "description": "The number indicates the factor with which the DDBC.OperationMode is configured. The factor should be greater than or equal to 0 and less or equal to 1."
+        },
+        "previous_operation_mode_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the DDBC,OperationMode that was active before the present one. This value shall always be provided, unless the active DDBC.OperationMode is the first DDBC.OperationMode the Resource Manager is aware of."
+        },
+        "transition_timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time at which the transition from the previous DDBC.OperationMode to the active DDBC.OperationMode was initiated. This value shall always be provided, unless the active DDBC.OperationMode is the first DDBC.OperationMode the Resource Manager is aware of."
+        }
+    },
+    "required": ["message_type", "message_id", "active_operation_mode_id", "operation_mode_factor"],
+    "additionalProperties": false
 }

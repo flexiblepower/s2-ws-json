@@ -1,39 +1,39 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/DDBC.SystemDescription.schema.json",
-	"title": "DDBC_SystemDescription",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "DDBC.SystemDescription"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"valid_from": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Moment this DDBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past."
-		},
-		"actuators": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 10,
-			"items": {
-				"$ref": "../schemas/DDBC.ActuatorDescription.schema.json"
-			},
-			"description": "List of all available actuators in the system. Must contain at least one DDBC.ActuatorAggregated."
-		},
-		"present_demand_rate": {
-			"$ref": "../schemas/NumberRange.schema.json",
-			"description": "Present demand rate that needs to be satisfied by the system"
-		},
-		"provides_average_demand_rate_forecast": {
-			"type": "boolean",
-			"description": "Indicates whether the Resource Manager could provide a demand rate forecast through the DDBC.AverageDemandRateForecast."
-		}
-	},
-	"required": ["message_type", "message_id", "valid_from", "actuators", "present_demand_rate", "provides_average_demand_rate_forecast"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/DDBC.SystemDescription.schema.json",
+    "title": "DDBC_SystemDescription",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "DDBC.SystemDescription"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "valid_from": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Moment this DDBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past."
+        },
+        "actuators": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+                "$ref": "../schemas/DDBC.ActuatorDescription.schema.json"
+            },
+            "description": "List of all available actuators in the system. Must contain at least one DDBC.ActuatorAggregated."
+        },
+        "present_demand_rate": {
+            "$ref": "../schemas/NumberRange.schema.json",
+            "description": "Present demand rate that needs to be satisfied by the system"
+        },
+        "provides_average_demand_rate_forecast": {
+            "type": "boolean",
+            "description": "Indicates whether the Resource Manager could provide a demand rate forecast through the DDBC.AverageDemandRateForecast."
+        }
+    },
+    "required": ["message_type", "message_id", "valid_from", "actuators", "present_demand_rate", "provides_average_demand_rate_forecast"],
+    "additionalProperties": false
 }

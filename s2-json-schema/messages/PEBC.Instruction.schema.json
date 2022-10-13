@@ -1,43 +1,43 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/PEBC.Instruction.schema.json",
-	"title": "PEBC_Instruction",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "PEBC.Instruction"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "Identifier of this PEBC.Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
-		},
-		"execution_time": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Indicates the moment the execution of the instruction shall start."
-		},
-		"abnormal_condition": {
-			"type": "boolean",
-			"description": "Indicates if this is an instruction during an abnormal condition."
-		},
-		"power_constraints_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "Identifier of the PEBC.PowerConstraints this PEBC.Instruction was based on."
-		},
-		"power_envelopes": {
-			"type": "array",
-			"minItems": 1,
-			"maxItems": 10,
-			"items": {
-				"$ref": "../schemas/PEBC.PowerEnvelope.schema.json"
-			},
-			"description": "The PEBC.PowerEnvelope(s) that should be followed by the Resource Manager. There shall be at least one PEBC.PowerEnvelope, but at most one PEBC.PowerEnvelope for each CommodityQuantity."
-		}
-	},
-	"required": ["message_type", "message_id", "id", "execution_time", "abnormal_condition", "power_constraints_id", "power_envelopes"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/PEBC.Instruction.schema.json",
+    "title": "PEBC_Instruction",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "PEBC.Instruction"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "Identifier of this PEBC.Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+        },
+        "execution_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Indicates the moment the execution of the instruction shall start."
+        },
+        "abnormal_condition": {
+            "type": "boolean",
+            "description": "Indicates if this is an instruction during an abnormal condition."
+        },
+        "power_constraints_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "Identifier of the PEBC.PowerConstraints this PEBC.Instruction was based on."
+        },
+        "power_envelopes": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+                "$ref": "../schemas/PEBC.PowerEnvelope.schema.json"
+            },
+            "description": "The PEBC.PowerEnvelope(s) that should be followed by the Resource Manager. There shall be at least one PEBC.PowerEnvelope, but at most one PEBC.PowerEnvelope for each CommodityQuantity."
+        }
+    },
+    "required": ["message_type", "message_id", "id", "execution_time", "abnormal_condition", "power_constraints_id", "power_envelopes"],
+    "additionalProperties": false
 }

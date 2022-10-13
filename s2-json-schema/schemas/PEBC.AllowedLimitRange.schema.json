@@ -1,25 +1,25 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.AllowedLimitRange.schema.json",
-	"title": "PEBC_AllowedLimitRange",
-	"properties": {
-		"commodity_quantity": {
-			"$ref": "../schemas/CommodityQuantity.schema.json",
-			"description": "Type of power quantity this PEBC.AllowedLimitRange applies to"
-		},
-		"limit_type": {
-			"$ref": "../schemas/PEBC.PowerEnvelopeLimitType.schema.json",
-			"description": "Indicates if this ranges applies to the upper limit or the lower limit"
-		},
-		"range_boundary": {
-			"$ref": "../schemas/NumberRange.schema.json",
-			"description": "Boundaries of the power range of this PEBC.AllowedLimitRange. The CEM is allowed to choose values within this range for the power envelope for the limit as described in limit_type. The start of the range shall be smaller or equal than the end of the range. "
-		},
-		"abnormal_condition_only": {
-			"type": "boolean",
-			"description": "Indicates if this PEBC.AllowedLimitRange may only be used during an abnormal condition"
-		}
-	},
-	"required": ["commodity_quantity", "limit_type", "range_boundary", "abnormal_condition_only"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PEBC.AllowedLimitRange.schema.json",
+    "title": "PEBC_AllowedLimitRange",
+    "properties": {
+        "commodity_quantity": {
+            "$ref": "../schemas/CommodityQuantity.schema.json",
+            "description": "Type of power quantity this PEBC.AllowedLimitRange applies to"
+        },
+        "limit_type": {
+            "$ref": "../schemas/PEBC.PowerEnvelopeLimitType.schema.json",
+            "description": "Indicates if this ranges applies to the upper limit or the lower limit"
+        },
+        "range_boundary": {
+            "$ref": "../schemas/NumberRange.schema.json",
+            "description": "Boundaries of the power range of this PEBC.AllowedLimitRange. The CEM is allowed to choose values within this range for the power envelope for the limit as described in limit_type. The start of the range shall be smaller or equal than the end of the range. "
+        },
+        "abnormal_condition_only": {
+            "type": "boolean",
+            "description": "Indicates if this PEBC.AllowedLimitRange may only be used during an abnormal condition"
+        }
+    },
+    "required": ["commodity_quantity", "limit_type", "range_boundary", "abnormal_condition_only"],
+    "additionalProperties": false
 }

@@ -1,7 +1,7 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/Commodity.schema.json",
-	"title": "Commodity",
-	"enum": ["GAS", "HEAT", "ELECTRICITY", "OIL"],
-	"description": "GAS: Identifier for Commodity GAS\nHEAT: Identifier for Commodity HEAT\nELECTRICITY: Identifier for Commodity ELECTRICITY\nOIL: Identifier for Commodity OIL"
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/Commodity.schema.json",
+    "title": "Commodity",
+    "enum": ["GAS", "HEAT", "ELECTRICITY", "OIL"],
+    "description": "GAS: Identifier for Commodity GAS\nHEAT: Identifier for Commodity HEAT\nELECTRICITY: Identifier for Commodity ELECTRICITY\nOIL: Identifier for Commodity OIL"
 }

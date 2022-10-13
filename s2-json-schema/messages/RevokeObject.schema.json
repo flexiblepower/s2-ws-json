@@ -1,25 +1,25 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/RevokeObject.schema.json",
-	"title": "RevokeObject",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "RevokeObject"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"object_type": {
-			"$ref": "../schemas/RevokableObjects.schema.json",
-			"description": "The type of object that needs to be revoked"
-		},
-		"object_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "The ID of object that needs to be revoked"
-		}
-	},
-	"required": ["message_type", "message_id", "object_type", "object_id"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/RevokeObject.schema.json",
+    "title": "RevokeObject",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "RevokeObject"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "object_type": {
+            "$ref": "../schemas/RevokableObjects.schema.json",
+            "description": "The type of object that needs to be revoked"
+        },
+        "object_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "The ID of object that needs to be revoked"
+        }
+    },
+    "required": ["message_type", "message_id", "object_type", "object_id"],
+    "additionalProperties": false
 }

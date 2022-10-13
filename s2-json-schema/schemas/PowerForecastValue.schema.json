@@ -1,41 +1,41 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PowerForecastValue.schema.json",
-	"title": "PowerForecastValue",
-	"properties": {
-		"value_upper_limit": {
-			"type": "number",
-			"description": "The upper boundary of the range with 100 % certainty the power value is in it"
-		},
-		"value_upper_95PPR": {
-			"type": "number",
-			"description": "The upper boundary of the range with 95 % certainty the power value is in it"
-		},
-		"value_upper_68PPR": {
-			"type": "number",
-			"description": "The upper boundary of the range with 68 % certainty the power value is in it"
-		},
-		"value_expected": {
-			"type": "number",
-			"description": "The expected power value."
-		},
-		"value_lower_68PPR": {
-			"type": "number",
-			"description": "The lower boundary of the range with 68 % certainty the power value is in it"
-		},
-		"value_lower_95PPR": {
-			"type": "number",
-			"description": "The lower boundary of the range with 95 % certainty the power value is in it"
-		},
-		"value_lower_limit": {
-			"type": "number",
-			"description": "The lower boundary of the range with 100 % certainty the power value is in it"
-		},
-		"commodity_quantity": {
-			"$ref": "../schemas/CommodityQuantity.schema.json",
-			"description": "The power quantity the value refers to"
-		}
-	},
-	"required": ["value_expected", "commodity_quantity"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PowerForecastValue.schema.json",
+    "title": "PowerForecastValue",
+    "properties": {
+        "value_upper_limit": {
+            "type": "number",
+            "description": "The upper boundary of the range with 100 % certainty the power value is in it"
+        },
+        "value_upper_95PPR": {
+            "type": "number",
+            "description": "The upper boundary of the range with 95 % certainty the power value is in it"
+        },
+        "value_upper_68PPR": {
+            "type": "number",
+            "description": "The upper boundary of the range with 68 % certainty the power value is in it"
+        },
+        "value_expected": {
+            "type": "number",
+            "description": "The expected power value."
+        },
+        "value_lower_68PPR": {
+            "type": "number",
+            "description": "The lower boundary of the range with 68 % certainty the power value is in it"
+        },
+        "value_lower_95PPR": {
+            "type": "number",
+            "description": "The lower boundary of the range with 95 % certainty the power value is in it"
+        },
+        "value_lower_limit": {
+            "type": "number",
+            "description": "The lower boundary of the range with 100 % certainty the power value is in it"
+        },
+        "commodity_quantity": {
+            "$ref": "../schemas/CommodityQuantity.schema.json",
+            "description": "The power quantity the value refers to"
+        }
+    },
+    "required": ["value_expected", "commodity_quantity"],
+    "additionalProperties": false
 }

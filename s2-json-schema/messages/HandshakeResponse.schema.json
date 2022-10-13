@@ -1,21 +1,21 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/HandshakeResponse.schema.json",
-	"title": "HandshakeResponse",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "HandshakeResponse"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"selected_protocol_version": {
-			"type": "string",
-			"description": "The protocol version the CEM selected for this session"
-		}
-	},
-	"required": ["message_type", "message_id", "selected_protocol_version"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/HandshakeResponse.schema.json",
+    "title": "HandshakeResponse",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "HandshakeResponse"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "selected_protocol_version": {
+            "type": "string",
+            "description": "The protocol version the CEM selected for this session"
+        }
+    },
+    "required": ["message_type", "message_id", "selected_protocol_version"],
+    "additionalProperties": false
 }

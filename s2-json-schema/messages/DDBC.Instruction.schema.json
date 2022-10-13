@@ -1,42 +1,42 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/DDBC.Instruction.schema.json",
-	"title": "DDBC_Instruction",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "DDBC.Instruction"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "Identifier of this DDBC.Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
-		},
-		"execution_time": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Indicates the moment the execution of the instruction shall start"
-		},
-		"abnormal_condition": {
-			"type": "boolean",
-			"description": "Indicates if this is an instruction during an abnormal condition"
-		},
-		"actuator_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the actuator this Instruction belongs to."
-		},
-		"operation_mode_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the DDBC.OperationMode"
-		},
-		"operation_mode_factor": {
-			"type": "number",
-			"description": "The number indicates the factor with which the OMBC.OperationMode should be configured. The factor should be greater than or equal to 0 and less or equal to 1."
-		}
-	},
-	"required": ["message_type", "message_id", "id", "execution_time", "abnormal_condition", "actuator_id", "operation_mode_id", "operation_mode_factor"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/DDBC.Instruction.schema.json",
+    "title": "DDBC_Instruction",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "DDBC.Instruction"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "Identifier of this DDBC.Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM."
+        },
+        "execution_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Indicates the moment the execution of the instruction shall start"
+        },
+        "abnormal_condition": {
+            "type": "boolean",
+            "description": "Indicates if this is an instruction during an abnormal condition"
+        },
+        "actuator_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the actuator this Instruction belongs to."
+        },
+        "operation_mode_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the DDBC.OperationMode"
+        },
+        "operation_mode_factor": {
+            "type": "number",
+            "description": "The number indicates the factor with which the OMBC.OperationMode should be configured. The factor should be greater than or equal to 0 and less or equal to 1."
+        }
+    },
+    "required": ["message_type", "message_id", "id", "execution_time", "abnormal_condition", "actuator_id", "operation_mode_id", "operation_mode_factor"],
+    "additionalProperties": false
 }

@@ -1,30 +1,30 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/InstructionStatusUpdate.schema.json",
-	"title": "InstructionStatusUpdate",
-	"properties": {
-		"message_type": {
-			"type": "string",
-			"const": "InstructionStatusUpdate"
-		},
-		"message_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this message"
-		},
-		"instruction_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of this instruction (as provided by the CEM) "
-		},
-		"status_type": {
-			"$ref": "../schemas/InstructionStatus.schema.json",
-			"description": "Present status of this instruction."
-		},
-		"timestamp": {
-			"type": "string",
-			"format": "date-time",
-			"description": "Timestamp when status_type has changed the last time."
-		}
-	},
-	"required": ["message_type", "message_id", "instruction_id", "status_type", "timestamp"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/InstructionStatusUpdate.schema.json",
+    "title": "InstructionStatusUpdate",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "InstructionStatusUpdate"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "instruction_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this instruction (as provided by the CEM) "
+        },
+        "status_type": {
+            "$ref": "../schemas/InstructionStatus.schema.json",
+            "description": "Present status of this instruction."
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when status_type has changed the last time."
+        }
+    },
+    "required": ["message_type", "message_id", "instruction_id", "status_type", "timestamp"],
+    "additionalProperties": false
 }

@@ -1,29 +1,29 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PPBC.PowerSequenceContainerStatus.schema.json",
-	"title": "PPBC_PowerSequenceContainerStatus",
-	"properties": {
-		"power_profile_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the PPBC.PowerProfileDefinition of which the data element ‘sequence_container_id’ refers to. "
-		},
-		"sequence_container_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of the PPBC.PowerSequenceContainer this PPBC.PowerSequenceContainerStatus provides information about."
-		},
-		"selected_sequence_id": {
-			"$ref": "../schemas/ID.schema.json",
-			"description": "ID of selected PPBC.PowerSequence. When no ID is given, no sequence was selected yet."
-		},
-		"progress": {
-			"$ref": "../schemas/Duration.schema.json",
-			"description": "Time that has passed since the selected sequence has started. A value must be provided, unless no sequence has been selected or the selected sequence hasn’t started yet."
-		},
-		"status": {
-			"$ref": "../schemas/PPBC.PowerSequenceStatus.schema.json",
-			"description": "Status of the selected PPBC.PowerSequence"
-		}
-	},
-	"required": ["power_profile_id", "sequence_container_id", "status"],
-	"additionalProperties": false
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/PPBC.PowerSequenceContainerStatus.schema.json",
+    "title": "PPBC_PowerSequenceContainerStatus",
+    "properties": {
+        "power_profile_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the PPBC.PowerProfileDefinition of which the data element ‘sequence_container_id’ refers to. "
+        },
+        "sequence_container_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the PPBC.PowerSequenceContainer this PPBC.PowerSequenceContainerStatus provides information about."
+        },
+        "selected_sequence_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of selected PPBC.PowerSequence. When no ID is given, no sequence was selected yet."
+        },
+        "progress": {
+            "$ref": "../schemas/Duration.schema.json",
+            "description": "Time that has passed since the selected sequence has started. A value must be provided, unless no sequence has been selected or the selected sequence hasn’t started yet."
+        },
+        "status": {
+            "$ref": "../schemas/PPBC.PowerSequenceStatus.schema.json",
+            "description": "Status of the selected PPBC.PowerSequence"
+        }
+    },
+    "required": ["power_profile_id", "sequence_container_id", "status"],
+    "additionalProperties": false
 }

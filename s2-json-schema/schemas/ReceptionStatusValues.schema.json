@@ -1,7 +1,7 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/ReceptionStatusValues.schema.json",
-	"title": "ReceptionStatusValues",
-	"enum": ["INVALID_DATA", "INVALID_MESSAGE", "INVALID_CONTENT", "TEMPORARY_ERROR", "PERMANENT_ERROR", "OK"],
-	"description": "INVALID_DATA: Message not understood (e.g. not valid JSON, no message_id found). Consequence: Message is ignored, proceed if possible\nINVALID_MESSAGE: Message was not according to schema. Consequence: Message is ignored, proceed if possible\nINVALID_CONTENT: Message contents is invalid (e.g. contains a non-existing ID). Somewhat equivalent to BAD_REQUEST in HTTP.. Consequence: Message is ignored, proceed if possible.\nTEMPORARY_ERROR: Receiver encountered an error. Consequence: Try to send to message again\nPERMANENT_ERROR: Receiver encountered an error which it cannot recover from. Consequence: Disconnect.\nOK: Message processed normally. Consequence: Proceed normally."
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/ReceptionStatusValues.schema.json",
+    "title": "ReceptionStatusValues",
+    "enum": ["INVALID_DATA", "INVALID_MESSAGE", "INVALID_CONTENT", "TEMPORARY_ERROR", "PERMANENT_ERROR", "OK"],
+    "description": "INVALID_DATA: Message not understood (e.g. not valid JSON, no message_id found). Consequence: Message is ignored, proceed if possible\nINVALID_MESSAGE: Message was not according to schema. Consequence: Message is ignored, proceed if possible\nINVALID_CONTENT: Message contents is invalid (e.g. contains a non-existing ID). Somewhat equivalent to BAD_REQUEST in HTTP.. Consequence: Message is ignored, proceed if possible.\nTEMPORARY_ERROR: Receiver encountered an error. Consequence: Try to send to message again\nPERMANENT_ERROR: Receiver encountered an error which it cannot recover from. Consequence: Disconnect.\nOK: Message processed normally. Consequence: Proceed normally."
 }
