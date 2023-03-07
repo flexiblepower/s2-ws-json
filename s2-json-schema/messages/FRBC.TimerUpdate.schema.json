@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/messages/FRBC.TimerUpdate.schema.json",
+    "title": "FRBC_TimerUpdate",
+    "properties": {
+        "message_type": {
+            "type": "string",
+            "const": "FRBC.TimerUpdate"
+        },
+        "message_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of this message"
+        },
+        "timer_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "The ID of the timer this message refers to"
+        },
+        "actuator_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "The ID of the actuator the timer belongs to"
+        },
+        "finished_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past."
+        }
+    },
+    "required": ["message_type", "message_id", "timer_id", "actuator_id", "finished_at"],
+    "additionalProperties": false
+}

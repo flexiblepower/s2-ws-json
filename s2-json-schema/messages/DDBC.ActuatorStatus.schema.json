@@ -11,6 +11,10 @@
             "$ref": "../schemas/ID.schema.json",
             "description": "ID of this message"
         },
+        "actuator_id": {
+            "$ref": "../schemas/ID.schema.json",
+            "description": "ID of the actuator this messages refers to"
+        },
         "active_operation_mode_id": {
             "$ref": "../schemas/ID.schema.json",
             "description": "The operation mode that is presently active for this actuator."
@@ -29,6 +33,6 @@
             "description": "Time at which the transition from the previous DDBC.OperationMode to the active DDBC.OperationMode was initiated. This value shall always be provided, unless the active DDBC.OperationMode is the first DDBC.OperationMode the Resource Manager is aware of."
         }
     },
-    "required": ["message_type", "message_id", "active_operation_mode_id", "operation_mode_factor"],
+    "required": ["message_type", "message_id", "actuator_id", "active_operation_mode_id", "operation_mode_factor"],
     "additionalProperties": false
 }

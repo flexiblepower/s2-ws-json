@@ -1,6 +1,6 @@
 asyncapi: 2.4.0
 info:
-  title: S2
+  title: s2-ws-json
   version: 0.0.1-beta
   description: This file specifices a WebSockets based version of the EN50491-12-2 standard.
 channels:

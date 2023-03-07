@@ -1,6 +1,6 @@
 asyncapi: 2.4.0
 info:
-  title: S2
+  title: s2-ws-json
   version: 0.0.1-beta
   description: This file specifices a WebSockets based version of the EN50491-12-2 standard.
 channels:
@@ -34,6 +34,7 @@ channels:
         - $ref: '#/components/messages/DDBC.SystemDescription'
         - $ref: '#/components/messages/DDBC.ActuatorStatus'
         - $ref: '#/components/messages/DDBC.AverageDemandRateForecast'
+        - $ref: '#/components/messages/DDBC.TimerUpdate'
         - $ref: '#/components/messages/RevokeObject'
         - $ref: '#/components/messages/SessionRequest'
 components:
@@ -223,7 +224,6 @@ components:
       required:
       - id
       - duration
-      - finished_at
       properties:
         id:
           $ref: '#/components/schemas/ID'
@@ -234,10 +234,6 @@ components:
         duration:
           $ref: '#/components/schemas/Duration'
           description: "The time it takes for the Timer to finish after it has been started"
-        finished_at:
-          type: string
-          format: date-time
-          description: "Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past."
       additionalProperties: false
     PowerForecastElement:
       type: object
@@ -414,6 +410,32 @@ components:
         NOT_CONTROLABLE: Identifier that is to be used if no control is possible. Resources of this type can still provide measurements and forecast
         NO_SELECTION: Identifier that is to be used if no control type is or has been selected. 
   messages:
+    DDBC.TimerUpdate:
+      payload:
+        type: object
+        required:
+        - message_type
+        - message_id
+        - timer_id
+        - actuator_id
+        - finished_at
+        properties:
+          message_type:
+            type: string
+            const: "DDBC.TimerUpdate"
+          message_id:
+            $ref: '#/components/schemas/ID'
+          timer_id:
+            $ref: '#/components/schemas/ID'
+            description: "The ID of the timer this message refers to"
+          actuator_id:
+            $ref: '#/components/schemas/ID'
+            description: "The ID of the actuator the timer belongs to"
+          finished_at:
+            type: string
+            format: date-time
+            description: "Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past."
+        additionalProperties: false
     SelectControlType:
       payload:
         type: object
@@ -718,6 +740,7 @@ components:
         required:
         - message_type
         - message_id
+        - actuator_id
         - active_operation_mode_id
         - operation_mode_factor
         properties:
@@ -726,6 +749,9 @@ components:
             const: "DDBC.ActuatorStatus"
           message_id:
             $ref: '#/components/schemas/ID'
+          actuator_id:
+            $ref: '#/components/schemas/ID'
+            description: "ID of the actuator this messages refers to"
           active_operation_mode_id:
             $ref: '#/components/schemas/ID'
             description: "The operation mode that is presently active for this actuator."

@@ -14,13 +14,8 @@
         "duration": {
             "$ref": "../schemas/Duration.schema.json",
             "description": "The time it takes for the Timer to finish after it has been started"
-        },
-        "finished_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past."
         }
     },
-    "required": ["id", "duration", "finished_at"],
+    "required": ["id", "duration"],
     "additionalProperties": false
 }
