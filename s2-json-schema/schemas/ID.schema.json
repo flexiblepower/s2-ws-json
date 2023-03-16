@@ -4,5 +4,5 @@
     "title": "ID",
     "type": "string",
     "pattern": "[a-zA-Z0-9\\-_:]{2,64}",
-    "description": "An identifier exapressed as a UUID"
+    "description": "An identifier expressed as a UUID"
 }
