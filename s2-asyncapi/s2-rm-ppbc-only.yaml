@@ -23,6 +23,7 @@ channels:
         - $ref: '#/components/messages/PPBC.ScheduleInstruction'
         - $ref: '#/components/messages/PPBC.StartInterruptionInstruction'
         - $ref: '#/components/messages/PPBC.EndInterruptionInstruction'
+        - $ref: '#/components/messages/RevokeObject'
         - $ref: '#/components/messages/SessionRequest'
     publish:
       message:

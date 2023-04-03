@@ -21,6 +21,7 @@ channels:
         - $ref: '#/components/messages/SelectControlType'
         - $ref: '#/components/messages/ReceptionStatus'
         - $ref: '#/components/messages/PEBC.Instruction'
+        - $ref: '#/components/messages/RevokeObject'
         - $ref: '#/components/messages/SessionRequest'
     publish:
       message:
