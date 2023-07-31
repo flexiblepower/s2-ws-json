@@ -1,0 +1,1928 @@
+components:
+  schemas:
+    Commodity:
+      description: 'GAS: Identifier for Commodity GAS
+
+        HEAT: Identifier for Commodity HEAT
+
+        ELECTRICITY: Identifier for Commodity ELECTRICITY
+
+        OIL: Identifier for Commodity OIL'
+      enum:
+      - GAS
+      - HEAT
+      - ELECTRICITY
+      - OIL
+    CommodityQuantity:
+      description: 'ELECTRIC.POWER.L1: Electric power described in Watt on phase 1. If a device utilizes only one phase it should always use L1.
+
+        ELECTRIC.POWER.L2: Electric power described in Watt on phase 2. Only applicable for 3 phase devices.
+
+        ELECTRIC.POWER.L3: Electric power described in Watt on phase 3. Only applicable for 3 phase devices.
+
+        ELECTRIC.POWER.3_PHASE_SYMMETRIC: Electric power described in Watt on when power is equally shared among the three phases. Only applicable for 3 phase devices.
+
+        NATURAL_GAS.FLOW_RATE: Gas flow rate described in liters per second
+
+        HYDROGEN.FLOW_RATE: Gas flow rate described in grams per second
+
+        HEAT.TEMPERATURE: Heat described in degrees Celsius
+
+        HEAT.FLOW_RATE: Flow rate of heat carrying gas or liquid in liters per second
+
+        HEAT.THERMAL_POWER: Thermal power in Watt
+
+        OIL.FLOW_RATE: Oil flow rate described in liters per hour'
+      enum:
+      - ELECTRIC.POWER.L1
+      - ELECTRIC.POWER.L2
+      - ELECTRIC.POWER.L3
+      - ELECTRIC.POWER.3_PHASE_SYMMETRIC
+      - NATURAL_GAS.FLOW_RATE
+      - HYDROGEN.FLOW_RATE
+      - HEAT.TEMPERATURE
+      - HEAT.FLOW_RATE
+      - HEAT.THERMAL_POWER
+      - OIL.FLOW_RATE
+    ControlType:
+      description: 'POWER_ENVELOPE_BASED_CONTROL: Identifier for the Power Envelope Based Control type
+
+        POWER_PROFILE_BASED_CONTROL: Identifier for the Power Profile Based Control type
+
+        OPERATION_MODE_BASED_CONTROL: Identifier for the Operation Mode Based Control type
+
+        FILL_RATE_BASED_CONTROL: Identifier for the Demand Driven Based Control type
+
+        DEMAND_DRIVEN_BASED_CONTROL: Identifier for the Fill Rate Based Control type
+
+        NOT_CONTROLABLE: Identifier that is to be used if no control is possible. Resources of this type can still provide measurements and forecast
+
+        NO_SELECTION: Identifier that is to be used if no control type is or has been selected. '
+      enum:
+      - POWER_ENVELOPE_BASED_CONTROL
+      - POWER_PROFILE_BASED_CONTROL
+      - OPERATION_MODE_BASED_CONTROL
+      - FILL_RATE_BASED_CONTROL
+      - DEMAND_DRIVEN_BASED_CONTROL
+      - NOT_CONTROLABLE
+      - NO_SELECTION
+    Currency:
+      description: Currency used when this resource gives cost information
+      enum:
+      - AED
+      - ANG
+      - AUD
+      - CHE
+      - CHF
+      - CHW
+      - EUR
+      - GBP
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLL
+      - SOS
+      - SRD
+      - SSP
+      - STD
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VND
+      - VUV
+      - WST
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      type: string
+    DDBC_ActuatorDescription:
+      additionalProperties: false
+      properties:
+        diagnostic_label:
+          description: Human readable name/description of the actuator. This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this DDBC.ActuatorDescription. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        operation_modes:
+          description: List of all Operation Modes that are available for this actuator. There shall be at least one DDBC.OperationMode.
+          items:
+            $ref: '#/components/schemas/DDBC_OperationMode'
+          maxItems: 100
+          minItems: 1
+          type: array
+        supported_commodites:
+          description: Commodities supported by the operation modes of this actuator. There shall be at least one commodity
+          items:
+            $ref: '#/components/schemas/Commodity'
+          maxItems: 4
+          minItems: 1
+          type: array
+        timers:
+          description: List of Timers associated with Transitions for this Actuator. Can be empty.
+          items:
+            $ref: '#/components/schemas/Timer'
+          maxItems: 1000
+          minItems: 0
+          type: array
+        transitions:
+          description: List of Transitions between Operation Modes. Shall contain at least one Transition.
+          items:
+            $ref: '#/components/schemas/Transition'
+          maxItems: 1000
+          minItems: 0
+          type: array
+      required:
+      - id
+      - supported_commodites
+      - operation_modes
+      - transitions
+      - timers
+    DDBC_ActuatorStatus:
+      additionalProperties: false
+      properties:
+        active_operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: The operation mode that is presently active for this actuator.
+        actuator_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the actuator this messages refers to
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: DDBC.ActuatorStatus
+          type: string
+        operation_mode_factor:
+          description: The number indicates the factor with which the DDBC.OperationMode is configured. The factor should be greater than or equal to 0 and less or equal to 1.
+          type: number
+        previous_operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the DDBC,OperationMode that was active before the present one. This value shall always be provided, unless the active DDBC.OperationMode is the first DDBC.OperationMode the Resource Manager is aware of.
+        transition_timestamp:
+          description: Time at which the transition from the previous DDBC.OperationMode to the active DDBC.OperationMode was initiated. This value shall always be provided, unless the active DDBC.OperationMode is the first DDBC.OperationMode the Resource Manager is aware of.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - actuator_id
+      - active_operation_mode_id
+      - operation_mode_factor
+    DDBC_AverageDemandRateForecast:
+      additionalProperties: false
+      properties:
+        elements:
+          description: Elements of the profile. Elements must be placed in chronological order.
+          items:
+            $ref: '#/components/schemas/DDBC_AverageDemandRateForecastElement'
+          maxItems: 288
+          minItems: 1
+          type: array
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: DDBC.AverageDemandRateForecast
+          type: string
+        start_time:
+          description: Start time of the profile.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - start_time
+      - elements
+    DDBC_AverageDemandRateForecastElement:
+      additionalProperties: false
+      properties:
+        demand_rate_expected:
+          description: The most likely value for the demand rate; the expected increase or decrease of the fill_level per second
+          type: number
+        demand_rate_lower_68PPR:
+          description: The lower limit of the range with a 68 % probability that the demand rate is within that range
+          type: number
+        demand_rate_lower_95PPR:
+          description: The lower limit of the range with a 95 % probability that the demand rate is within that range
+          type: number
+        demand_rate_lower_limit:
+          description: The lower limit of the range with a 100 % probability that the demand rate is within that range
+          type: number
+        demand_rate_upper_68PPR:
+          description: The upper limit of the range with a 68 % probability that the demand rate is within that range
+          type: number
+        demand_rate_upper_95PPR:
+          description: The upper limit of the range with a 95 % probability that the demand rate is within that range
+          type: number
+        demand_rate_upper_limit:
+          description: The upper limit of the range with a 100 % probability that the demand rate is within that range
+          type: number
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: Duration of the element
+      required:
+      - duration
+      - demand_rate_expected
+    DDBC_Instruction:
+      additionalProperties: false
+      properties:
+        abnormal_condition:
+          description: Indicates if this is an instruction during an abnormal condition
+          type: boolean
+        actuator_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the actuator this Instruction belongs to.
+        execution_time:
+          description: Indicates the moment the execution of the instruction shall start
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: Identifier of this DDBC.Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: DDBC.Instruction
+          type: string
+        operation_mode_factor:
+          description: The number indicates the factor with which the OMBC.OperationMode should be configured. The factor should be greater than or equal to 0 and less or equal to 1.
+          type: number
+        operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the DDBC.OperationMode
+      required:
+      - message_type
+      - message_id
+      - id
+      - execution_time
+      - abnormal_condition
+      - actuator_id
+      - operation_mode_id
+      - operation_mode_factor
+    DDBC_OperationMode:
+      additionalProperties: false
+      properties:
+        Id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this operation mode. Must be unique in the scope of the DDBC.ActuatorDescription in which it is used.
+        abnormal_condition_only:
+          description: Indicates if this DDBC.OperationMode may only be used during an abnormal condition.
+          type: boolean
+        diagnostic_label:
+          description: Human readable name/description of the DDBC.OperationMode. This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        power_ranges:
+          description: The power produced or consumed by this operation mode. The start of each PowerRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1. In the array there must be at least one PowerRange, and at most one PowerRange per CommodityQuantity.
+          items:
+            $ref: '#/components/schemas/PowerRange'
+          maxItems: 10
+          minItems: 1
+          type: array
+        running_costs:
+          $ref: '#/components/schemas/NumberRange'
+          description: Additional costs per second (e.g. wear, services) associated with this operation mode in the currency defined by the ResourceManagerDetails, excluding the commodity cost. The range is expressing uncertainty and is not linked to the operation_mode_factor.
+        supply_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: The supply rate this DDBC.OperationMode can deliver for the CEM to match the demand rate. The start of the NumberRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1.
+      required:
+      - Id
+      - power_ranges
+      - supply_range
+      - abnormal_condition_only
+    DDBC_SystemDescription:
+      additionalProperties: false
+      properties:
+        actuators:
+          description: List of all available actuators in the system. Must contain at least one DDBC.ActuatorAggregated.
+          items:
+            $ref: '#/components/schemas/DDBC_ActuatorDescription'
+          maxItems: 10
+          minItems: 1
+          type: array
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: DDBC.SystemDescription
+          type: string
+        present_demand_rate:
+          $ref: '#/components/schemas/NumberRange'
+          description: Present demand rate that needs to be satisfied by the system
+        provides_average_demand_rate_forecast:
+          description: Indicates whether the Resource Manager could provide a demand rate forecast through the DDBC.AverageDemandRateForecast.
+          type: boolean
+        valid_from:
+          description: Moment this DDBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - valid_from
+      - actuators
+      - present_demand_rate
+      - provides_average_demand_rate_forecast
+    DDBC_TimerStatus:
+      additionalProperties: false
+      properties:
+        actuator_id:
+          $ref: '#/components/schemas/ID'
+          description: The ID of the actuator the timer belongs to
+        finished_at:
+          description: Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past.
+          format: date-time
+          type: string
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: DDBC.TimerStatus
+          type: string
+        timer_id:
+          $ref: '#/components/schemas/ID'
+          description: The ID of the timer this message refers to
+      required:
+      - message_type
+      - message_id
+      - timer_id
+      - actuator_id
+      - finished_at
+    Duration:
+      description: Duration in milliseconds
+      minimum: 0
+      type: integer
+    EnergyManagementRole:
+      description: 'CEM: Customer Energy Manager
+
+        RM: Resource Manager'
+      enum:
+      - CEM
+      - RM
+    FRBC_ActuatorDescription:
+      additionalProperties: false
+      properties:
+        diagnostic_label:
+          description: Human readable name/description for the actuator. This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the Actuator. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        operation_modes:
+          description: Provided FRBC.OperationModes associated with this actuator
+          items:
+            $ref: '#/components/schemas/FRBC_OperationMode'
+          maxItems: 100
+          minItems: 1
+          type: array
+        supported_commodities:
+          description: List of all supported Commodities.
+          items:
+            $ref: '#/components/schemas/Commodity'
+          maxItems: 4
+          minItems: 1
+          type: array
+        timers:
+          description: List of Timers associated with this actuator
+          items:
+            $ref: '#/components/schemas/Timer'
+          maxItems: 1000
+          minItems: 0
+          type: array
+        transitions:
+          description: Possible transitions between FRBC.OperationModes associated with this actuator.
+          items:
+            $ref: '#/components/schemas/Transition'
+          maxItems: 1000
+          minItems: 0
+          type: array
+      required:
+      - id
+      - supported_commodities
+      - operation_modes
+      - transitions
+      - timers
+    FRBC_ActuatorStatus:
+      additionalProperties: false
+      properties:
+        active_operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the FRBC.OperationMode that is presently active.
+        actuator_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the actuator this messages refers to
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.ActuatorStatus
+          type: string
+        operation_mode_factor:
+          description: The number indicates the factor with which the FRBC.OperationMode is configured. The factor should be greater than or equal than 0 and less or equal to 1.
+          type: number
+        previous_operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the FRBC.OperationMode that was active before the present one. This value shall always be provided, unless the active FRBC.OperationMode is the first FRBC.OperationMode the Resource Manager is aware of.
+        transition_timestamp:
+          description: Time at which the transition from the previous FRBC.OperationMode to the active FRBC.OperationMode was initiated. This value shall always be provided, unless the active FRBC.OperationMode is the first FRBC.OperationMode the Resource Manager is aware of.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - actuator_id
+      - active_operation_mode_id
+      - operation_mode_factor
+    FRBC_FillLevelTargetProfile:
+      additionalProperties: false
+      properties:
+        elements:
+          description: List of different fill levels that have to be targeted within a given duration. There shall be at least one element. Elements must be placed in chronological order.
+          items:
+            $ref: '#/components/schemas/FRBC_FillLevelTargetProfileElement'
+          maxItems: 288
+          minItems: 1
+          type: array
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.FillLevelTargetProfile
+          type: string
+        start_time:
+          description: Time at which the FRBC.FillLevelTargetProfile starts.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - start_time
+      - elements
+    FRBC_FillLevelTargetProfileElement:
+      additionalProperties: false
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: The duration of the element.
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: The target range in which the fill_level must be for the time period during which the element is active. The start of the range must be smaller or equal to the end of the range. The CEM must take best-effort actions to proactively achieve this target.
+      required:
+      - duration
+      - fill_level_range
+    FRBC_Instruction:
+      additionalProperties: false
+      properties:
+        abnormal_condition:
+          description: Indicates if this is an instruction during an abnormal condition.
+          type: boolean
+        actuator_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the actuator this instruction belongs to.
+        execution_time:
+          description: Time when instruction should be executed.
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.Instruction
+          type: string
+        operation_mode:
+          $ref: '#/components/schemas/ID'
+          description: ID of the FRBC.OperationMode that should be activated.
+        operation_mode_factor:
+          description: The number indicates the factor with which the FRBC.OperationMode should be configured. The factor should be greater than or equal to 0 and less or equal to 1.
+          type: number
+      required:
+      - message_type
+      - message_id
+      - id
+      - actuator_id
+      - operation_mode
+      - operation_mode_factor
+      - execution_time
+      - abnormal_condition
+    FRBC_LeakageBehaviour:
+      additionalProperties: false
+      properties:
+        elements:
+          description: List of elements that model the leakage behaviour of the buffer. The fill_level_ranges of the elements must be contiguous.
+          items:
+            $ref: '#/components/schemas/FRBC_LeakageBehaviourElement'
+          maxItems: 288
+          minItems: 1
+          type: array
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.LeakageBehaviour
+          type: string
+        valid_from:
+          description: Moment this FRBC.LeakageBehaviour starts to be valid. If the FRBC.LeakageBehaviour is immediately valid, the DateTimeStamp should be now or in the past.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - valid_from
+      - elements
+    FRBC_LeakageBehaviourElement:
+      additionalProperties: false
+      properties:
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: The fill level range for which this FRBC.LeakageBehaviourElement applies. The start of the range must be less than the end of the range.
+        leakage_rate:
+          description: Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level.
+          type: number
+      required:
+      - fill_level_range
+      - leakage_rate
+    FRBC_OperationMode:
+      additionalProperties: false
+      properties:
+        abnormal_condition_only:
+          description: Indicates if this FRBC.OperationMode may only be used during an abnormal condition
+          type: boolean
+        diagnostic_label:
+          description: Human readable name/description of the FRBC.OperationMode. This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        elements:
+          description: List of FRBC.OperationModeElements, which describe the properties of this FRBC.OperationMode depending on the fill_level. The fill_level_ranges of the items in the Array must be contiguous.
+          items:
+            $ref: '#/components/schemas/FRBC_OperationModeElement'
+          maxItems: 100
+          minItems: 1
+          type: array
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the FRBC.OperationMode. Must be unique in the scope of the FRBC.ActuatorDescription in which it is used.
+      required:
+      - id
+      - elements
+      - abnormal_condition_only
+    FRBC_OperationModeElement:
+      additionalProperties: false
+      properties:
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: The range of the fill level for which this FRBC.OperationModeElement applies. The start of the NumberRange shall be smaller than the end of the NumberRange.
+        fill_rate:
+          $ref: '#/components/schemas/NumberRange'
+          description: 'Indicates the change in fill_level per second. The lower_boundary of the NumberRange is associated with an operation_mode_factor of 0, the upper_boundary is associated with an operation_mode_factor of 1. '
+        power_ranges:
+          description: The power produced or consumed by this operation mode. The start of each PowerRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1. In the array there must be at least one PowerRange, and at most one PowerRange per CommodityQuantity.
+          items:
+            $ref: '#/components/schemas/PowerRange'
+          maxItems: 10
+          minItems: 1
+          type: array
+        running_costs:
+          $ref: '#/components/schemas/NumberRange'
+          description: Additional costs per second (e.g. wear, services) associated with this operation mode in the currency defined by the ResourceManagerDetails, excluding the commodity cost. The range is expressing uncertainty and is not linked to the operation_mode_factor.
+      required:
+      - fill_level_range
+      - fill_rate
+      - power_ranges
+    FRBC_StorageDescription:
+      additionalProperties: false
+      properties:
+        diagnostic_label:
+          description: Human readable name/description of the storage (e.g. hot water buffer or battery). This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        fill_level_label:
+          description: Human readable description of the (physical) units associated with the fill_level (e.g. degrees Celsius or percentage state of charge). This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        fill_level_range:
+          $ref: '#/components/schemas/NumberRange'
+          description: 'The range in which the fill_level should remain. It is expected of the CEM to keep the fill_level within this range. When the fill_level is not within this range, the Resource Manager can ignore instructions from the CEM (except during abnormal conditions). '
+        provides_fill_level_target_profile:
+          description: Indicates whether the Storage could provide a target profile for the fill level through the FRBC.FillLevelTargetProfile.
+          type: boolean
+        provides_leakage_behaviour:
+          description: Indicates whether the Storage could provide details of power leakage behaviour through the FRBC.LeakageBehaviour.
+          type: boolean
+        provides_usage_forecast:
+          description: Indicates whether the Storage could provide a UsageForecast through the FRBC.UsageForecast.
+          type: boolean
+      required:
+      - provides_leakage_behaviour
+      - provides_fill_level_target_profile
+      - provides_usage_forecast
+      - fill_level_range
+    FRBC_StorageStatus:
+      additionalProperties: false
+      properties:
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.StorageStatus
+          type: string
+        present_fill_level:
+          description: Present fill level of the Storage
+          type: number
+      required:
+      - message_type
+      - message_id
+      - present_fill_level
+    FRBC_SystemDescription:
+      additionalProperties: false
+      properties:
+        actuators:
+          description: Details of all Actuators.
+          items:
+            $ref: '#/components/schemas/FRBC_ActuatorDescription'
+          maxItems: 10
+          minItems: 1
+          type: array
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.SystemDescription
+          type: string
+        storage:
+          $ref: '#/components/schemas/FRBC_StorageDescription'
+          description: Details of the storage.
+        valid_from:
+          description: Moment this FRBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - valid_from
+      - actuators
+      - storage
+    FRBC_TimerStatus:
+      additionalProperties: false
+      properties:
+        actuator_id:
+          $ref: '#/components/schemas/ID'
+          description: The ID of the actuator the timer belongs to
+        finished_at:
+          description: Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past.
+          format: date-time
+          type: string
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.TimerStatus
+          type: string
+        timer_id:
+          $ref: '#/components/schemas/ID'
+          description: The ID of the timer this message refers to
+      required:
+      - message_type
+      - message_id
+      - timer_id
+      - actuator_id
+      - finished_at
+    FRBC_UsageForecast:
+      additionalProperties: false
+      properties:
+        elements:
+          description: Further elements that model the profile. There shall be at least one element. Elements must be placed in chronological order.
+          items:
+            $ref: '#/components/schemas/FRBC_UsageForecastElement'
+          maxItems: 288
+          minItems: 1
+          type: array
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: FRBC.UsageForecast
+          type: string
+        start_time:
+          description: Time at which the FRBC.UsageForecast starts.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - start_time
+      - elements
+    FRBC_UsageForecastElement:
+      additionalProperties: false
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: Indicator for how long the given usage_rate is valid.
+        usage_rate_expected:
+          description: The most likely value for the usage rate; the expected increase or decrease of the fill_level per second
+          type: number
+        usage_rate_lower_68PPR:
+          description: The lower limit of the range with a 68 % probability that the usage rate is within that range
+          type: number
+        usage_rate_lower_95PPR:
+          description: The lower limit of the range with a 95 % probability that the usage rate is within that range
+          type: number
+        usage_rate_lower_limit:
+          description: The lower limit of the range with a 100 % probability that the usage rate is within that range
+          type: number
+        usage_rate_upper_68PPR:
+          description: The upper limit of the range with a 68 % probability that the usage rate is within that range
+          type: number
+        usage_rate_upper_95PPR:
+          description: 'The upper limit of the range with a 95 % probability that the usage rate is within that range. '
+          type: number
+        usage_rate_upper_limit:
+          description: The upper limit of the range with a 100 % probability that the usage rate is within that range.
+          type: number
+      required:
+      - duration
+      - usage_rate_expected
+    Handshake:
+      additionalProperties: false
+      properties:
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: Handshake
+          type: string
+        role:
+          $ref: '#/components/schemas/EnergyManagementRole'
+          description: The role of the sender of this message
+        supported_protocol_versions:
+          description: Protocol versions supported by the sender of this message. This field is mandatory for the RM, but optional for the CEM.
+          items:
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - message_type
+      - message_id
+      - role
+    HandshakeResponse:
+      additionalProperties: false
+      properties:
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: HandshakeResponse
+          type: string
+        selected_protocol_version:
+          description: The protocol version the CEM selected for this session
+          type: string
+      required:
+      - message_type
+      - message_id
+      - selected_protocol_version
+    ID:
+      description: An identifier expressed as a UUID
+      pattern: '[a-zA-Z0-9\-_:]{2,64}'
+      type: string
+    InstructionStatus:
+      description: 'NEW: Instruction was newly created
+
+        ACCEPTED: Instruction has been accepted
+
+        REJECTED: Instruction was rejected
+
+        REVOKED: Instruction was revoked
+
+        STARTED: Instruction was executed
+
+        SUCCEEDED: Instruction finished successfully
+
+        ABORTED: Instruction was aborted.'
+      enum:
+      - NEW
+      - ACCEPTED
+      - REJECTED
+      - REVOKED
+      - STARTED
+      - SUCCEEDED
+      - ABORTED
+    InstructionStatusUpdate:
+      additionalProperties: false
+      properties:
+        instruction_id:
+          $ref: '#/components/schemas/ID'
+          description: 'ID of this instruction (as provided by the CEM) '
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: InstructionStatusUpdate
+          type: string
+        status_type:
+          $ref: '#/components/schemas/InstructionStatus'
+          description: Present status of this instruction.
+        timestamp:
+          description: Timestamp when status_type has changed the last time.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - instruction_id
+      - status_type
+      - timestamp
+    NumberRange:
+      additionalProperties: false
+      properties:
+        end_of_range:
+          description: Number that defines the end of the range
+          type: number
+        start_of_range:
+          description: Number that defines the start of the range
+          type: number
+      required:
+      - start_of_range
+      - end_of_range
+    OMBC_Instruction:
+      additionalProperties: false
+      properties:
+        abnormal_condition:
+          description: Indicates if this is an instruction during an abnormal condition
+          type: boolean
+        execution_time:
+          description: Time when instruction should be executed.
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: OMBC.Instruction
+          type: string
+        operation_mode_factor:
+          description: The number indicates the factor with which the OMBC.OperationMode should be configured. The factor should be greater than or equal than 0 and less or equal to 1.
+          type: number
+        operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the OMBC.OperationMode that should be activated
+      required:
+      - message_type
+      - message_id
+      - id
+      - execution_time
+      - operation_mode_id
+      - operation_mode_factor
+      - abnormal_condition
+    OMBC_OperationMode:
+      additionalProperties: false
+      properties:
+        abnormal_condition_only:
+          description: Indicates if this OMBC.OperationMode may only be used during an abnormal condition.
+          type: boolean
+        diagnostic_label:
+          description: Human readable name/description of the OMBC.OperationMode. This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the OBMC.OperationMode. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        power_ranges:
+          description: The power produced or consumed by this operation mode. The start of each PowerRange is associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor of 1. In the array there must be at least one PowerRange, and at most one PowerRange per CommodityQuantity.
+          items:
+            $ref: '#/components/schemas/PowerRange'
+          maxItems: 10
+          minItems: 1
+          type: array
+        running_costs:
+          $ref: '#/components/schemas/NumberRange'
+          description: Additional costs per second (e.g. wear, services) associated with this operation mode in the currency defined by the ResourceManagerDetails , excluding the commodity cost. The range is expressing uncertainty and is not linked to the operation_mode_factor.
+      required:
+      - id
+      - power_ranges
+      - abnormal_condition_only
+    OMBC_Status:
+      additionalProperties: false
+      properties:
+        active_operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the active OMBC.OperationMode.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: OMBC.Status
+          type: string
+        operation_mode_factor:
+          description: The number indicates the factor with which the OMBC.OperationMode should be configured. The factor should be greater than or equal than 0 and less or equal to 1.
+          type: number
+        previous_operation_mode_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the OMBC.OperationMode that was previously active. This value shall always be provided, unless the active OMBC.OperationMode is the first OMBC.OperationMode the Resource Manager is aware of.
+        transition_timestamp:
+          description: Time at which the transition from the previous OMBC.OperationMode to the active OMBC.OperationMode was initiated. This value shall always be provided, unless the active OMBC.OperationMode is the first OMBC.OperationMode the Resource Manager is aware of.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - active_operation_mode_id
+      - operation_mode_factor
+    OMBC_SystemDescription:
+      additionalProperties: false
+      properties:
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: OMBC.SystemDescription
+          type: string
+        operation_modes:
+          description: OMBC.OperationModes available for the CEM in order to coordinate the device behaviour.
+          items:
+            $ref: '#/components/schemas/OMBC_OperationMode'
+          maxItems: 100
+          minItems: 1
+          type: array
+        timers:
+          description: Timers that control when certain transitions can be made.
+          items:
+            $ref: '#/components/schemas/Timer'
+          maxItems: 1000
+          minItems: 0
+          type: array
+        transitions:
+          description: Possible transitions to switch from one OMBC.OperationMode to another.
+          items:
+            $ref: '#/components/schemas/Transition'
+          maxItems: 1000
+          minItems: 0
+          type: array
+        valid_from:
+          description: Moment this OMBC.SystemDescription starts to be valid. If the system description is immediately valid, the DateTimeStamp should be now or in the past.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - valid_from
+      - operation_modes
+      - transitions
+      - timers
+    OMBC_TimerStatus:
+      additionalProperties: false
+      properties:
+        finished_at:
+          description: Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. If the timer was never started, the value can be an arbitrary DateTimeStamp in the past.
+          format: date-time
+          type: string
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: OMBC.TimerStatus
+          type: string
+        timer_id:
+          $ref: '#/components/schemas/ID'
+          description: The ID of the timer this message refers to
+      required:
+      - message_type
+      - message_id
+      - timer_id
+      - finished_at
+    PEBC_AllowedLimitRange:
+      additionalProperties: false
+      properties:
+        abnormal_condition_only:
+          description: Indicates if this PEBC.AllowedLimitRange may only be used during an abnormal condition
+          type: boolean
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: Type of power quantity this PEBC.AllowedLimitRange applies to
+        limit_type:
+          $ref: '#/components/schemas/PEBC_PowerEnvelopeLimitType'
+          description: Indicates if this ranges applies to the upper limit or the lower limit
+        range_boundary:
+          $ref: '#/components/schemas/NumberRange'
+          description: 'Boundaries of the power range of this PEBC.AllowedLimitRange. The CEM is allowed to choose values within this range for the power envelope for the limit as described in limit_type. The start of the range shall be smaller or equal than the end of the range. '
+      required:
+      - commodity_quantity
+      - limit_type
+      - range_boundary
+      - abnormal_condition_only
+    PEBC_EnergyConstraint:
+      additionalProperties: false
+      properties:
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: Type of power quantity which applies to upper_average_power and lower_average_power
+        id:
+          $ref: '#/components/schemas/ID'
+          description: Identifier of this PEBC.EnergyConstraints. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        lower_average_power:
+          description: 'Lower average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated lower energy content can be derived. This is the lowest amount of energy the resource will consume during that period of time.  '
+          type: number
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PEBC.EnergyConstraint
+          type: string
+        upper_average_power:
+          description: Upper average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated upper energy content can be derived. This is the highest amount of energy the resource will consume during that period of time.
+          type: number
+        valid_from:
+          description: Moment this PEBC.EnergyConstraints information starts to be valid
+          format: date-time
+          type: string
+        valid_until:
+          description: Moment until this PEBC.EnergyConstraints information is valid.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - id
+      - valid_from
+      - valid_until
+      - upper_average_power
+      - lower_average_power
+      - commodity_quantity
+    PEBC_Instruction:
+      additionalProperties: false
+      properties:
+        abnormal_condition:
+          description: Indicates if this is an instruction during an abnormal condition.
+          type: boolean
+        execution_time:
+          description: Indicates the moment the execution of the instruction shall start.
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: Identifier of this PEBC.Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PEBC.Instruction
+          type: string
+        power_constraints_id:
+          $ref: '#/components/schemas/ID'
+          description: Identifier of the PEBC.PowerConstraints this PEBC.Instruction was based on.
+        power_envelopes:
+          description: The PEBC.PowerEnvelope(s) that should be followed by the Resource Manager. There shall be at least one PEBC.PowerEnvelope, but at most one PEBC.PowerEnvelope for each CommodityQuantity.
+          items:
+            $ref: '#/components/schemas/PEBC_PowerEnvelope'
+          maxItems: 10
+          minItems: 1
+          type: array
+      required:
+      - message_type
+      - message_id
+      - id
+      - execution_time
+      - abnormal_condition
+      - power_constraints_id
+      - power_envelopes
+    PEBC_PowerConstraints:
+      additionalProperties: false
+      properties:
+        allowed_limit_ranges:
+          description: The actual constraints. There shall be at least one PEBC.AllowedLimitRange for the UPPER_LIMIT and at least one AllowedLimitRange for the LOWER_LIMIT. It is allowed to have multiple PEBC.AllowedLimitRange objects with identical CommodityQuantities and LimitTypes.
+          items:
+            $ref: '#/components/schemas/PEBC_AllowedLimitRange'
+          maxItems: 100
+          minItems: 2
+          type: array
+        consequence_type:
+          $ref: '#/components/schemas/PEBC_PowerEnvelopeConsequenceType'
+          description: Type of consequence of limiting power
+        id:
+          $ref: '#/components/schemas/ID'
+          description: Identifier of this PEBC.PowerConstraints. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PEBC.PowerConstraints
+          type: string
+        valid_from:
+          description: Moment this PEBC.PowerConstraints start to be valid
+          format: date-time
+          type: string
+        valid_until:
+          description: Moment until this PEBC.PowerConstraints is valid. If valid_until is not present, there is no determined end time of this PEBC.PowerConstraints.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - id
+      - valid_from
+      - consequence_type
+      - allowed_limit_ranges
+    PEBC_PowerEnvelope:
+      additionalProperties: false
+      properties:
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: Type of power quantity this PEBC.PowerEnvelope applies to
+        id:
+          $ref: '#/components/schemas/ID'
+          description: Identifier of this PEBC.PowerEnvelope. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        power_envelope_elements:
+          description: The elements of this PEBC.PowerEnvelope. Shall contain at least one element. Elements must be placed in chronological order.
+          items:
+            $ref: '#/components/schemas/PEBC_PowerEnvelopeElement'
+          maxItems: 288
+          minItems: 1
+          type: array
+      required:
+      - id
+      - commodity_quantity
+      - power_envelope_elements
+    PEBC_PowerEnvelopeConsequenceType:
+      description: 'VANISH: Indicating that the limited load or generated will be lost and not reappear in the future (see Clause 7.6.2)
+
+        DEFER: Indicating that the limited load or generation will be postponed to a later moment (see Clause 7.6.2)'
+      enum:
+      - VANISH
+      - DEFER
+    PEBC_PowerEnvelopeElement:
+      additionalProperties: false
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: The duration of the element
+        lower_limit:
+          description: Lower power limit according to the commodity_quantity of the containing PEBC.PowerEnvelope. The lower_limit must be smaller or equal to the upper_limit. The Resource Manager is requested to keep the power values for the given commodity quantity equal to or above the lower_limit. The lower_limit shall be in accordance with the constraints provided by the Resource Manager through any PEBC.AllowedLimitRange with limit_type LOWER_LIMIT.
+          type: number
+        upper_limit:
+          description: Upper power limit according to the commodity_quantity of the containing PEBC.PowerEnvelope. The lower_limit must be smaller or equal to the upper_limit. The Resource Manager is requested to keep the power values for the given commodity quantity equal to or below the upper_limit. The upper_limit shall be in accordance with the constraints provided by the Resource Manager through any PEBC.AllowedLimitRange with limit_type UPPER_LIMIT.
+          type: number
+      required:
+      - duration
+      - upper_limit
+      - lower_limit
+    PEBC_PowerEnvelopeLimitType:
+      description: 'UPPER_LIMIT: Indicating the upper limit of a PEBC.PowerEnvelope (see Clause 7.6.2)
+
+        LOWER_LIMIT: Indicating the lower limit of a PEBC.PowerEnvelope (see Clause 7.6.2)'
+      enum:
+      - UPPER_LIMIT
+      - LOWER_LIMIT
+    PPBC_EndInterruptionInstruction:
+      additionalProperties: false
+      properties:
+        abnormal_condition:
+          description: Indicates if this is an instruction during an abnormal condition
+          type: boolean
+        execution_time:
+          description: End time of Interruption of the PPBC.PowerSequence.
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PPBC.EndInterruptionInstruction
+          type: string
+        power_profile_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence interruption is being ended by the CEM.
+        power_sequence_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequence for which the CEM wants to end the interruption.
+        sequence_container_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence interruption is being ended by the CEM.
+      required:
+      - message_type
+      - message_id
+      - id
+      - power_profile_id
+      - sequence_container_id
+      - power_sequence_id
+      - execution_time
+      - abnormal_condition
+    PPBC_PowerProfileDefinition:
+      additionalProperties: false
+      properties:
+        end_time:
+          description: Indicates when the last PPBC.PowerSequence shall be finished at the latest
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerProfileDefinition. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PPBC.PowerProfileDefinition
+          type: string
+        power_sequences_containers:
+          description: The PPBC.PowerSequenceContainers that make up this PPBC.PowerProfileDefinition. There shall be at least one PPBC.PowerSequenceContainer that includes at least one PPBC.PowerSequence. PPBC.PowerSequenceContainers must be placed in chronological order.
+          items:
+            $ref: '#/components/schemas/PPBC_PowerSequenceContainer'
+          maxItems: 1000
+          minItems: 1
+          type: array
+        start_time:
+          description: Indicates the first possible time the first PPBC.PowerSequence could start
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - id
+      - start_time
+      - end_time
+      - power_sequences_containers
+    PPBC_PowerProfileStatus:
+      additionalProperties: false
+      properties:
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PPBC.PowerProfileStatus
+          type: string
+        sequence_container_status:
+          description: Array with status information for all PPBC.PowerSequenceContainers in the PPBC.PowerProfileDefinition.
+          items:
+            $ref: '#/components/schemas/PPBC_PowerSequenceContainerStatus'
+          maxItems: 1000
+          minItems: 1
+          type: array
+      required:
+      - message_type
+      - message_id
+      - sequence_container_status
+    PPBC_PowerSequence:
+      additionalProperties: false
+      properties:
+        abnormal_condition_only:
+          description: Indicates if this PPBC.PowerSequence may only be used during an abnormal condition
+          type: boolean
+        elements:
+          description: List of PPBC.PowerSequenceElements. Shall contain at least one element. Elements must be placed in chronological order.
+          items:
+            $ref: '#/components/schemas/PPBC_PowerSequenceElement'
+          maxItems: 288
+          minItems: 1
+          type: array
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequence. Must be unique in the scope of the PPBC.PowerSequnceContainer in which it is used.
+        is_interruptible:
+          description: Indicates whether the option of pausing a sequence is available.
+          type: boolean
+        max_pause_before:
+          $ref: '#/components/schemas/Duration'
+          description: The maximum duration for which a device can be paused between the end of the previous running sequence and the start of this one
+      required:
+      - id
+      - elements
+      - is_interruptible
+      - abnormal_condition_only
+    PPBC_PowerSequenceContainer:
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequenceContainer. Must be unique in the scope of the PPBC.PowerProfileDefinition in which it is used.
+        power_sequences:
+          description: List of alternative Sequences where one could be chosen by the CEM
+          items:
+            $ref: '#/components/schemas/PPBC_PowerSequence'
+          maxItems: 288
+          minItems: 1
+          type: array
+      required:
+      - id
+      - power_sequences
+    PPBC_PowerSequenceContainerStatus:
+      additionalProperties: false
+      properties:
+        power_profile_id:
+          $ref: '#/components/schemas/ID'
+          description: 'ID of the PPBC.PowerProfileDefinition of which the data element ‘sequence_container_id’ refers to. '
+        progress:
+          $ref: '#/components/schemas/Duration'
+          description: Time that has passed since the selected sequence has started. A value must be provided, unless no sequence has been selected or the selected sequence hasn’t started yet.
+        selected_sequence_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of selected PPBC.PowerSequence. When no ID is given, no sequence was selected yet.
+        sequence_container_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequenceContainer this PPBC.PowerSequenceContainerStatus provides information about.
+        status:
+          $ref: '#/components/schemas/PPBC_PowerSequenceStatus'
+          description: Status of the selected PPBC.PowerSequence
+      required:
+      - power_profile_id
+      - sequence_container_id
+      - status
+    PPBC_PowerSequenceElement:
+      additionalProperties: false
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: Duration of the PPBC.PowerSequenceElement.
+        power_values:
+          description: The value of power and deviations for the given duration. The array should contain at least one PowerForecastValue and at most one PowerForecastValue per CommodityQuantity.
+          items:
+            $ref: '#/components/schemas/PowerForecastValue'
+          maxItems: 10
+          minItems: 1
+          type: array
+      required:
+      - duration
+      - power_values
+    PPBC_PowerSequenceStatus:
+      description: 'NOT_SCHEDULED: No PPBC.PowerSequence within the PPBC.PowerSequenceContainer is scheduled
+
+        SCHEDULED: The selected PPBC.PowerSequence is scheduled to be executed in the future
+
+        EXECUTING: The selected PPBC.PowerSequence is currently being executed
+
+        INTERRUPTED: The selected PPBC.PowerSequence is being executed, but is currently interrupted and will continue afterwards
+
+        FINISHED: The selected PPBC.PowerSequence was executed and finished successfully
+
+        ABORTED: The selected PPBC.PowerSequence was aborted by the device and will not continue'
+      enum:
+      - NOT_SCHEDULED
+      - SCHEDULED
+      - EXECUTING
+      - INTERRUPTED
+      - FINISHED
+      - ABORTED
+    PPBC_ScheduleInstruction:
+      additionalProperties: false
+      properties:
+        abnormal_condition:
+          description: Indicates if this is an instruction during an abnormal condition
+          type: boolean
+        execution_time:
+          description: Start time of the PPBC.PowerSequence.
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PPBC.ScheduleInstruction
+          type: string
+        power_profile_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence is being selected and scheduled by the CEM.
+        power_sequence_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequence that is being selected and scheduled by the CEM.
+        sequence_container_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence is being selected and scheduled by the CEM.
+      required:
+      - message_type
+      - message_id
+      - id
+      - power_profile_id
+      - sequence_container_id
+      - power_sequence_id
+      - execution_time
+      - abnormal_condition
+    PPBC_StartInterruptionInstruction:
+      additionalProperties: false
+      properties:
+        abnormal_condition:
+          description: Indicates if this is an instruction during an abnormal condition
+          type: boolean
+        execution_time:
+          description: Start time of the interruption of the PPBC.PowerSequence.
+          format: date-time
+          type: string
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the Instruction. Must be unique in the scope of the Resource Manager, for at least the duration of the session between Resource Manager and CEM.
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PPBC.StartInterruptionInstruction
+          type: string
+        power_profile_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence is being interrupted by the CEM.
+        power_sequence_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequence that the CEM wants to interrupt.
+        sequence_container_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence is being interrupted by the CEM.
+      required:
+      - message_type
+      - message_id
+      - id
+      - power_profile_id
+      - sequence_container_id
+      - power_sequence_id
+      - execution_time
+      - abnormal_condition
+    PowerForecast:
+      additionalProperties: false
+      properties:
+        elements:
+          description: Elements of which this forecast consists. Contains at least one element. Elements must be placed in chronological order.
+          items:
+            $ref: '#/components/schemas/PowerForecastElement'
+          maxItems: 288
+          minItems: 1
+          type: array
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PowerForecast
+          type: string
+        start_time:
+          description: Start time of time period that is covered by the profile.
+          format: date-time
+          type: string
+      required:
+      - message_type
+      - message_id
+      - start_time
+      - elements
+    PowerForecastElement:
+      additionalProperties: false
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: Duration of the PowerForecastElement
+        power_values:
+          description: The values of power that are expected for the given period of time. There shall be at least one PowerForecastValue, and at most one PowerForecastValue per CommodityQuantity.
+          items:
+            $ref: '#/components/schemas/PowerForecastValue'
+          maxItems: 10
+          minItems: 1
+          type: array
+      required:
+      - duration
+      - power_values
+    PowerForecastValue:
+      additionalProperties: false
+      properties:
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: The power quantity the value refers to
+        value_expected:
+          description: The expected power value.
+          type: number
+        value_lower_68PPR:
+          description: The lower boundary of the range with 68 % certainty the power value is in it
+          type: number
+        value_lower_95PPR:
+          description: The lower boundary of the range with 95 % certainty the power value is in it
+          type: number
+        value_lower_limit:
+          description: The lower boundary of the range with 100 % certainty the power value is in it
+          type: number
+        value_upper_68PPR:
+          description: The upper boundary of the range with 68 % certainty the power value is in it
+          type: number
+        value_upper_95PPR:
+          description: The upper boundary of the range with 95 % certainty the power value is in it
+          type: number
+        value_upper_limit:
+          description: The upper boundary of the range with 100 % certainty the power value is in it
+          type: number
+      required:
+      - value_expected
+      - commodity_quantity
+    PowerMeasurement:
+      additionalProperties: false
+      properties:
+        measurement_timestamp:
+          description: Timestamp when PowerValues were measured.
+          format: date-time
+          type: string
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: PowerMeasurement
+          type: string
+        values:
+          description: Array of measured PowerValues. Must contain at least one item and at most one item per ‘commodity_quantity’ (defined inside the PowerValue).
+          items:
+            $ref: '#/components/schemas/PowerValue'
+          maxItems: 10
+          minItems: 1
+          type: array
+      required:
+      - message_type
+      - message_id
+      - measurement_timestamp
+      - values
+    PowerRange:
+      additionalProperties: false
+      properties:
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: The power quantity the values refer to
+        end_of_range:
+          description: Power value that defines the end of the range.
+          type: number
+        start_of_range:
+          description: Power value that defines the start of the range.
+          type: number
+      required:
+      - start_of_range
+      - end_of_range
+      - commodity_quantity
+    PowerValue:
+      additionalProperties: false
+      properties:
+        commodity_quantity:
+          $ref: '#/components/schemas/CommodityQuantity'
+          description: The power quantity the value refers to
+        value:
+          description: Power value expressed in the unit associated with the CommodityQuantity
+          type: number
+      required:
+      - commodity_quantity
+      - value
+    ReceptionStatus:
+      additionalProperties: false
+      properties:
+        diagnostic_label:
+          description: Diagnostic label that can be used to provide additional information for debugging. However, not for HMI purposes.
+          type: string
+        message_type:
+          const: ReceptionStatus
+          type: string
+        status:
+          $ref: '#/components/schemas/ReceptionStatusValues'
+          description: Enumeration of status values
+        subject_message_id:
+          $ref: '#/components/schemas/ID'
+          description: The message this ReceptionStatus refers to
+      required:
+      - message_type
+      - subject_message_id
+      - status
+    ReceptionStatusValues:
+      description: 'INVALID_DATA: Message not understood (e.g. not valid JSON, no message_id found). Consequence: Message is ignored, proceed if possible
+
+        INVALID_MESSAGE: Message was not according to schema. Consequence: Message is ignored, proceed if possible
+
+        INVALID_CONTENT: Message contents is invalid (e.g. contains a non-existing ID). Somewhat equivalent to BAD_REQUEST in HTTP.. Consequence: Message is ignored, proceed if possible.
+
+        TEMPORARY_ERROR: Receiver encountered an error. Consequence: Try to send to message again
+
+        PERMANENT_ERROR: Receiver encountered an error which it cannot recover from. Consequence: Disconnect.
+
+        OK: Message processed normally. Consequence: Proceed normally.'
+      enum:
+      - INVALID_DATA
+      - INVALID_MESSAGE
+      - INVALID_CONTENT
+      - TEMPORARY_ERROR
+      - PERMANENT_ERROR
+      - OK
+    ResourceManagerDetails:
+      additionalProperties: false
+      properties:
+        available_control_types:
+          description: The control types supported by this Resource Manager.
+          items:
+            $ref: '#/components/schemas/ControlType'
+          maxItems: 5
+          minItems: 1
+          type: array
+        currency:
+          $ref: '#/components/schemas/Currency'
+          description: Currency to be used for all information regarding costs. Mandatory if cost information is published.
+        firmware_version:
+          description: Version identifier of the firmware used in the device (provided by the manufacturer)
+          type: string
+        instruction_processing_delay:
+          $ref: '#/components/schemas/Duration'
+          description: The average time the combination of Resource Manager and HBES/BACS/SASS or (Smart) device needs to process and execute an instruction
+        manufacturer:
+          description: Name of Manufacturer
+          type: string
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: ResourceManagerDetails
+          type: string
+        model:
+          description: Name of the model of the device (provided by the manufacturer)
+          type: string
+        name:
+          description: Human readable name given by user
+          type: string
+        provides_forecast:
+          description: Indicates whether the ResourceManager is able to provide PowerForecasts
+          type: boolean
+        provides_power_measurement_types:
+          description: 'Array of all CommodityQuantities that this Resource Manager can provide measurements for. '
+          items:
+            $ref: '#/components/schemas/CommodityQuantity'
+          maxItems: 10
+          minItems: 1
+          type: array
+        resource_id:
+          $ref: '#/components/schemas/ID'
+          description: Identifier of the Resource Manager. Must be unique within the scope of the CEM.
+        roles:
+          description: Each Resource Manager provides one or more energy Roles
+          items:
+            $ref: '#/components/schemas/Role'
+          maxItems: 3
+          minItems: 1
+          type: array
+        serial_number:
+          description: Serial number of the device (provided by the manufacturer)
+          type: string
+      required:
+      - message_type
+      - message_id
+      - resource_id
+      - roles
+      - instruction_processing_delay
+      - available_control_types
+      - provides_forecast
+      - provides_power_measurement_types
+    RevokableObjects:
+      description: 'PEBC.PowerConstraints: Object type PEBC.PowerConstraints
+
+        PEBC.EnergyConstraint: Object type PEBC.EnergyConstraint
+
+        PEBC.Instruction: Object type PEBC.Instruction
+
+        PPBC.PowerProfileDefinition: Object type PPBC.PowerProfileDefinition
+
+        PPBC.ScheduleInstruction: Object type PPBC.ScheduleInstruction
+
+        PPBC.StartInterruptionInstruction: Object type PPBC.StartInterruptionInstruction
+
+        PPBC.EndInterruptionInstruction: Object type PPBC.EndInterruptionInstruction
+
+        OMBC.SystemDescription: Object type OMBC.SystemDescription
+
+        OMBC.Instruction: Object type OMBC.Instruction
+
+        FRBC.SystemDescription: Object type FRBC.SystemDescription
+
+        FRBC.Instruction: Object type FRBC.Instruction
+
+        DDBC.SystemDescription: Object type DDBC.SystemDescription
+
+        DDBC.Instruction: Object type DDBC.Instruction'
+      enum:
+      - PEBC.PowerConstraints
+      - PEBC.EnergyConstraint
+      - PEBC.Instruction
+      - PPBC.PowerProfileDefinition
+      - PPBC.ScheduleInstruction
+      - PPBC.StartInterruptionInstruction
+      - PPBC.EndInterruptionInstruction
+      - OMBC.SystemDescription
+      - OMBC.Instruction
+      - FRBC.SystemDescription
+      - FRBC.Instruction
+      - DDBC.SystemDescription
+      - DDBC.Instruction
+    RevokeObject:
+      additionalProperties: false
+      properties:
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: RevokeObject
+          type: string
+        object_id:
+          $ref: '#/components/schemas/ID'
+          description: The ID of object that needs to be revoked
+        object_type:
+          $ref: '#/components/schemas/RevokableObjects'
+          description: The type of object that needs to be revoked
+      required:
+      - message_type
+      - message_id
+      - object_type
+      - object_id
+    Role:
+      additionalProperties: false
+      properties:
+        commodity:
+          $ref: '#/components/schemas/Commodity'
+          description: Commodity the role refers to.
+        role:
+          $ref: '#/components/schemas/RoleType'
+          description: Role type of the Resource Manager for the given commodity
+      required:
+      - role
+      - commodity
+    RoleType:
+      description: 'ENERGY_PRODUCER: Identifier for RoleType Producer
+
+        ENERGY_CONSUMER: Identifier for RoleType Consumer
+
+        ENERGY_STORAGE: Identifier for RoleType Storage'
+      enum:
+      - ENERGY_PRODUCER
+      - ENERGY_CONSUMER
+      - ENERGY_STORAGE
+    SelectControlType:
+      additionalProperties: false
+      properties:
+        control_type:
+          $ref: '#/components/schemas/ControlType'
+          description: The ControlType to activate. Must be one of the available ControlTypes as defined in the ResourceManagerDetails
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: SelectControlType
+          type: string
+      required:
+      - message_type
+      - message_id
+      - control_type
+    SessionRequest:
+      additionalProperties: false
+      properties:
+        diagnostic_label:
+          description: Optional field for a human readible descirption for debugging purposes
+          type: string
+        message_id:
+          $ref: '#/components/schemas/ID'
+          description: ID of this message
+        message_type:
+          const: SessionRequest
+          type: string
+        request:
+          $ref: '#/components/schemas/SessionRequestType'
+          description: The type of request
+      required:
+      - message_type
+      - message_id
+      - request
+    SessionRequestType:
+      description: 'RECONNECT: Please reconnect the WebSocket session. Once reconnected, it starts from scratch with a handshake.
+
+        TERMINATE: Disconnect the session (client can try to reconnecting with exponential backoff)'
+      enum:
+      - RECONNECT
+      - TERMINATE
+    Timer:
+      additionalProperties: false
+      properties:
+        diagnostic_label:
+          description: Human readable name/description of the Timer. This element is only intended for diagnostic purposes and not for HMI applications.
+          type: string
+        duration:
+          $ref: '#/components/schemas/Duration'
+          description: The time it takes for the Timer to finish after it has been started
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the Timer. Must be unique in the scope of the OMBC.SystemDescription, FRBC.ActuatorDescription or DDBC.ActuatorDescription in which it is used.
+      required:
+      - id
+      - duration
+    Transition:
+      additionalProperties: false
+      properties:
+        abnormal_condition_only:
+          description: Indicates if this Transition may only be used during an abnormal condition (see Clause )
+          type: boolean
+        blocking_timers:
+          description: List of IDs of Timers that block this Transition from initiating while at least one of these Timers is not yet finished
+          items:
+            $ref: '#/components/schemas/ID'
+          maxItems: 1000
+          minItems: 0
+          type: array
+        from:
+          $ref: '#/components/schemas/ID'
+          description: ID of the OperationMode (exact type differs per ControlType) that should be switched from.
+        id:
+          $ref: '#/components/schemas/ID'
+          description: ID of the Transition. Must be unique in the scope of the OMBC.SystemDescription, FRBC.ActuatorDescription or DDBC.ActuatorDescription in which it is used.
+        start_timers:
+          description: List of IDs of Timers that will be (re)started when this transition is initiated
+          items:
+            $ref: '#/components/schemas/ID'
+          maxItems: 1000
+          minItems: 0
+          type: array
+        to:
+          $ref: '#/components/schemas/ID'
+          description: ID of the OperationMode (exact type differs per ControlType) that will be switched to.
+        transition_costs:
+          description: Absolute costs for going through this Transition in the currency as described in the ResourceManagerDetails.
+          type: number
+        transition_duration:
+          $ref: '#/components/schemas/Duration'
+          description: Indicates the time between the initiation of this Transition, and the time at which the device behaves according to the Operation Mode which is defined in the ‘to’ data element. When no value is provided it is assumed the transition duration is negligible.
+      required:
+      - id
+      - from
+      - to
+      - start_timers
+      - blocking_timers
+      - abnormal_condition_only
+info:
+  title: S2 Websocket specification
+  version: 0.0.1-beta
+openapi: 3.0.1

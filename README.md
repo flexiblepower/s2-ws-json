@@ -32,5 +32,17 @@ For convenience, there are several files which can be used in different situatio
 
 Inside the `messages` directory schemas can be found for messages that can be sent individually over the WebSocket session. Inside the `schemas` directory schemas can be found that are used within messages, but cannot be send indiviually.
 
+### OpenAPI Component Schema
+[OpenAPI](https://www.openapis.org/) is a common format for defining REST APIs. OpenAPI documents include the URL of 
+the server, the REST endpoints and the messages to add to requests or expect from responses. Due to its popularity,
+a number of code generators are available for OpenApi which may be used to generate the S2 specification in various
+languages. A list may be found [here](https://openapi-generator.tech/docs/generators).
+
+This implementation of S2 defines only messages to be send with websockets. Therefor code generators for OpenAPI do not 
+necessarily work as the S2 specification does not use the REST API technology. However, to allow use of the OpenAPI
+ecosystem, we do also supply an OpenAPI document without any endpoints in the `s2-schema-as-openapi` directory.
+Generators such as [datamodel-code-generator](https://koxudaxi.github.io/datamodel-code-generator/) for Python can
+utilize the OpenAPI format to generate all the required S2 messages.
+
 ## Documentation
 Further documentation regarding the s2-ws-json protocol specification can be found on the [GitHub Wiki](https://github.com/flexiblepower/s2-ws-json/wiki).
