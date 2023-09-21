@@ -27,11 +27,11 @@
         },
         "upper_average_power": {
             "type": "number",
-            "description": "Upper average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated upper energy content can be derived. This is the highest amount of energy the resource will consume during that period of time."
+            "description": "Upper average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated upper energy content can be derived. This is the highest amount of energy the resource will consume during that period of time. The Power Envelope created by the CEM must allow at least this much energy consumption (in case the number is positive). Must be greater than or equal to lower_average_power, and can be negative in case of energy production."
         },
         "lower_average_power": {
             "type": "number",
-            "description": "Lower average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated lower energy content can be derived. This is the lowest amount of energy the resource will consume during that period of time.  "
+            "description": "Lower average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated lower energy content can be derived. This is the lowest amount of energy the resource will consume during that period of time. The Power Envelope created by the CEM must allow at least this much energy production (in case the number is negative). Must be greater than or equal to lower_average_power, and can be negative in case of energy production."
         },
         "commodity_quantity": {
             "$ref": "../schemas/CommodityQuantity.schema.json",

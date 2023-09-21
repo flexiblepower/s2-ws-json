@@ -30,7 +30,7 @@
         "execution_time": {
             "type": "string",
             "format": "date-time",
-            "description": "End time of Interruption of the PPBC.PowerSequence."
+            "description": "Indicates the moment PPBC.PowerSequence interruption shall end. When the specified execution time is in the past, execution must start as soon as possible."
         },
         "abnormal_condition": {
             "type": "boolean",

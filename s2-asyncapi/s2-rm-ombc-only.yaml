@@ -1,7 +1,7 @@
 asyncapi: 2.4.0
 info:
   title: s2-ws-json
-  version: 0.0.1-beta
+  version: 0.0.2-beta
   description: This file specifices a WebSockets based version of the EN50491-12-2 standard.
 channels:
   default:
@@ -710,7 +710,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Time when instruction should be executed."
+            description: "Indicates the moment the execution of the instruction shall start. When the specified execution time is in the past, execution must start as soon as possible."
           operation_mode_id:
             $ref: '#/components/schemas/ID'
             description: "ID of the OMBC.OperationMode that should be activated"

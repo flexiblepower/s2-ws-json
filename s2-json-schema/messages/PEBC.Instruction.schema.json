@@ -18,7 +18,7 @@
         "execution_time": {
             "type": "string",
             "format": "date-time",
-            "description": "Indicates the moment the execution of the instruction shall start."
+            "description": "Indicates the moment the execution of the instruction shall start. When the specified execution time is in the past, execution must start as soon as possible."
         },
         "abnormal_condition": {
             "type": "boolean",

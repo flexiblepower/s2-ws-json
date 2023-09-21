@@ -9,7 +9,7 @@
         },
         "leakage_rate": {
             "type": "number",
-            "description": "Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level."
+            "description": "Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level. A positive value indicates that the fill level decreases over time due to leakage."
         }
     },
     "required": ["fill_level_range", "leakage_rate"],

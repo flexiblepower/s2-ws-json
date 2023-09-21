@@ -1,7 +1,7 @@
 asyncapi: 2.4.0
 info:
   title: s2-ws-json
-  version: 0.0.1-beta
+  version: 0.0.2-beta
   description: This file specifices a WebSockets based version of the EN50491-12-2 standard.
 channels:
   default:
@@ -574,7 +574,7 @@ components:
           description: "The fill level range for which this FRBC.LeakageBehaviourElement applies. The start of the range must be less than the end of the range."
         leakage_rate:
           type: number
-          description: "Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level."
+          description: "Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level. A positive value indicates that the fill level decreases over time due to leakage."
       additionalProperties: false
     FRBC.UsageForecastElement:
       type: object
@@ -587,25 +587,25 @@ components:
           description: "Indicator for how long the given usage_rate is valid."
         usage_rate_upper_limit:
           type: number
-          description: "The upper limit of the range with a 100 % probability that the usage rate is within that range."
+          description: "The upper limit of the range with a 100 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_upper_95PPR:
           type: number
-          description: "The upper limit of the range with a 95 % probability that the usage rate is within that range. "
+          description: "The upper limit of the range with a 95 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_upper_68PPR:
           type: number
-          description: "The upper limit of the range with a 68 % probability that the usage rate is within that range"
+          description: "The upper limit of the range with a 68 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_expected:
           type: number
-          description: "The most likely value for the usage rate; the expected increase or decrease of the fill_level per second"
+          description: "The most likely value for the usage rate; the expected increase or decrease of the fill_level per second. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_lower_68PPR:
           type: number
-          description: "The lower limit of the range with a 68 % probability that the usage rate is within that range"
+          description: "The lower limit of the range with a 68 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_lower_95PPR:
           type: number
-          description: "The lower limit of the range with a 95 % probability that the usage rate is within that range"
+          description: "The lower limit of the range with a 95 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_lower_limit:
           type: number
-          description: "The lower limit of the range with a 100 % probability that the usage rate is within that range"
+          description: "The lower limit of the range with a 100 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
       additionalProperties: false
     FRBC.FillLevelTargetProfileElement:
       type: object
@@ -1207,10 +1207,10 @@ components:
             description: "Moment until this PEBC.EnergyConstraints information is valid."
           upper_average_power:
             type: number
-            description: "Upper average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated upper energy content can be derived. This is the highest amount of energy the resource will consume during that period of time."
+            description: "Upper average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated upper energy content can be derived. This is the highest amount of energy the resource will consume during that period of time. The Power Envelope created by the CEM must allow at least this much energy consumption (in case the number is positive). Must be greater than or equal to lower_average_power, and can be negative in case of energy production."
           lower_average_power:
             type: number
-            description: "Lower average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated lower energy content can be derived. This is the lowest amount of energy the resource will consume during that period of time.  "
+            description: "Lower average power within the time period given by valid_from and valid_until. If the duration is multiplied with this power value, then the associated lower energy content can be derived. This is the lowest amount of energy the resource will consume during that period of time. The Power Envelope created by the CEM must allow at least this much energy production (in case the number is negative). Must be greater than or equal to lower_average_power, and can be negative in case of energy production."
           commodity_quantity:
             $ref: '#/components/schemas/CommodityQuantity'
             description: "Type of power quantity which applies to upper_average_power and lower_average_power"
@@ -1238,7 +1238,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Indicates the moment the execution of the instruction shall start."
+            description: "Indicates the moment the execution of the instruction shall start. When the specified execution time is in the past, execution must start as soon as possible."
           abnormal_condition:
             type: boolean
             description: "Indicates if this is an instruction during an abnormal condition."
@@ -1342,7 +1342,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Start time of the PPBC.PowerSequence."
+            description: "Indicates the moment the PPBC.PowerSequence shall start. When the specified execution time is in the past, execution must start as soon as possible."
           abnormal_condition:
             type: boolean
             description: "Indicates if this is an instruction during an abnormal condition"
@@ -1380,7 +1380,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Start time of the interruption of the PPBC.PowerSequence."
+            description: "Indicates the moment the PPBC.PowerSequence shall be interrupted. When the specified execution time is in the past, execution must start as soon as possible."
           abnormal_condition:
             type: boolean
             description: "Indicates if this is an instruction during an abnormal condition"
@@ -1418,7 +1418,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "End time of Interruption of the PPBC.PowerSequence."
+            description: "Indicates the moment PPBC.PowerSequence interruption shall end. When the specified execution time is in the past, execution must start as soon as possible."
           abnormal_condition:
             type: boolean
             description: "Indicates if this is an instruction during an abnormal condition"
@@ -1516,7 +1516,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Time when instruction should be executed."
+            description: "Indicates the moment the execution of the instruction shall start. When the specified execution time is in the past, execution must start as soon as possible."
           operation_mode_id:
             $ref: '#/components/schemas/ID'
             description: "ID of the OMBC.OperationMode that should be activated"
@@ -1665,7 +1665,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Time when instruction should be executed."
+            description: "Indicates the moment the execution of the instruction shall start. When the specified execution time is in the past, execution must start as soon as possible."
           abnormal_condition:
             type: boolean
             description: "Indicates if this is an instruction during an abnormal condition."
@@ -1812,7 +1812,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Indicates the moment the execution of the instruction shall start"
+            description: "Indicates the moment the execution of the instruction shall start. When the specified execution time is in the past, execution must start as soon as possible."
           abnormal_condition:
             type: boolean
             description: "Indicates if this is an instruction during an abnormal condition"

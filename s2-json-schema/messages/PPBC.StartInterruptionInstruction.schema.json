@@ -30,7 +30,7 @@
         "execution_time": {
             "type": "string",
             "format": "date-time",
-            "description": "Start time of the interruption of the PPBC.PowerSequence."
+            "description": "Indicates the moment the PPBC.PowerSequence shall be interrupted. When the specified execution time is in the past, execution must start as soon as possible."
         },
         "abnormal_condition": {
             "type": "boolean",

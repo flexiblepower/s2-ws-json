@@ -32,5 +32,10 @@ For convenience, there are several files which can be used in different situatio
 
 Inside the `messages` directory schemas can be found for messages that can be sent individually over the WebSocket session. Inside the `schemas` directory schemas can be found that are used within messages, but cannot be send indiviually.
 
+### Schemas in OpenAPI format
+**NB**: s2-ws-json is not a REST API and thus cannot be specified in OpenAPI!
+
+Since s2-ws-json doesn't use REST but WebSockets, OpenAPI is not a good fit and cannot be used to generate s2-ws-json endpoints. However, in some situations the code generator for OpenAPI are of better quality than those for AsyncAPI or JSON-Schema. As a practical solution, for such situations an OpenAPI specification with the schemas for s2-ws-json is provided as well. When using this file to generate code, programmers need to remove or ignore all code related to normal HTTP requests, and implement a WebSocket connection themselves.
+
 ## Documentation
 Further documentation regarding the s2-ws-json protocol specification can be found on the [GitHub Wiki](https://github.com/flexiblepower/s2-ws-json/wiki).

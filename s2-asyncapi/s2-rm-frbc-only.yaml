@@ -1,7 +1,7 @@
 asyncapi: 2.4.0
 info:
   title: s2-ws-json
-  version: 0.0.1-beta
+  version: 0.0.2-beta
   description: This file specifices a WebSockets based version of the EN50491-12-2 standard.
 channels:
   default:
@@ -386,7 +386,7 @@ components:
           description: "The fill level range for which this FRBC.LeakageBehaviourElement applies. The start of the range must be less than the end of the range."
         leakage_rate:
           type: number
-          description: "Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level."
+          description: "Indicates how fast the momentary fill level will decrease per second due to leakage within the given range of the fill level. A positive value indicates that the fill level decreases over time due to leakage."
       additionalProperties: false
     FRBC.UsageForecastElement:
       type: object
@@ -399,25 +399,25 @@ components:
           description: "Indicator for how long the given usage_rate is valid."
         usage_rate_upper_limit:
           type: number
-          description: "The upper limit of the range with a 100 % probability that the usage rate is within that range."
+          description: "The upper limit of the range with a 100 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_upper_95PPR:
           type: number
-          description: "The upper limit of the range with a 95 % probability that the usage rate is within that range. "
+          description: "The upper limit of the range with a 95 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_upper_68PPR:
           type: number
-          description: "The upper limit of the range with a 68 % probability that the usage rate is within that range"
+          description: "The upper limit of the range with a 68 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_expected:
           type: number
-          description: "The most likely value for the usage rate; the expected increase or decrease of the fill_level per second"
+          description: "The most likely value for the usage rate; the expected increase or decrease of the fill_level per second. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_lower_68PPR:
           type: number
-          description: "The lower limit of the range with a 68 % probability that the usage rate is within that range"
+          description: "The lower limit of the range with a 68 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_lower_95PPR:
           type: number
-          description: "The lower limit of the range with a 95 % probability that the usage rate is within that range"
+          description: "The lower limit of the range with a 95 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
         usage_rate_lower_limit:
           type: number
-          description: "The lower limit of the range with a 100 % probability that the usage rate is within that range"
+          description: "The lower limit of the range with a 100 % probability that the usage rate is within that range. A positive value indicates that the fill level will decrease due to usage."
       additionalProperties: false
     FRBC.FillLevelTargetProfileElement:
       type: object
@@ -912,7 +912,7 @@ components:
           execution_time:
             type: string
             format: date-time
-            description: "Time when instruction should be executed."
+            description: "Indicates the moment the execution of the instruction shall start. When the specified execution time is in the past, execution must start as soon as possible."
           abnormal_condition:
             type: boolean
             description: "Indicates if this is an instruction during an abnormal condition."
