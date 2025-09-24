@@ -1,0 +1,296 @@
+openapi: 3.0.3
+info:
+  version: "0.4"
+  title: s2-over-ip pairing and connection initiation
+  description: "The HTTP API specification of the pairing process for S2 over IP connections. For more information, please find the specification at [S2 documentation](https://docs.s2standard.org)."
+  license:
+    name: Apache-2.0
+    url: https://raw.githubusercontent.com/flexiblepower/s2-ws-json/refs/heads/main/LICENSE
+paths:
+  /preparePairing:
+    post:
+      description: Notify the server that the end user has started the process to pair to this server from a client. It is up to the server implementation to decide what to do with this signal, but it can be used to display a pop-up with the pairing token in its UI to improve the user experience. It must be implemented by the client, but only when there is a clear distriction between the moment perparePairing is called and when requestPairing is called. When a preparePairing is called, it is not guaranteed that a call to pairingRequest or cancelPreparePairing will follow.
+      requestBody:
+        description: A JSON message to inform the server which client is prepairing to pair.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PairingClientInfo'
+      responses:
+        '200':
+          description: Notification received.
+        '400':
+          description: Based on the provided information, the server already notifies the client it is not willing to pair with the client.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PairingResponseErrorMessage' 
+  /cancelPreparePairing:
+    post:
+      description: Cancel a previously notification of the preparePairing. This happens when the end user has stopped the process to pair the client with this server. It is up to the server implementation to decide what to do with this signal, but it can for example be used to close the pop-up showing the pairing token.
+      requestBody:
+        description: The s2ClientNodeId of the client cancelling the pairing.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/S2NodeId"
+      responses:
+        '200':
+          description: Cancellation received (also the response when the server does not recognize the S2ClientNodeId).
+  /requestPairing:
+    post:
+      description: Initiate pairing from the client. The server needs to present through its S2 server node UI the URL and the user code that the User needs to enter on the S2 client node UI. That information is used by the client to call this requestPairing endpoint.
+      requestBody:
+        description: A Json message with the pairing token and S2ClientNode information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PairingRequest'
+      responses:
+        '200':
+          description: Pairing successful. Return with access token to be used to initiate a connection, and S2ServerNode information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PairingResponse'
+        '400':
+          description: Pairing unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PairingResponseErrorMessage'
+  /initiateConnection:
+    post:
+      security:
+        - accessToken: []
+      description: Get a new access token for the S2 message communication channel.
+      requestBody:
+        description: A json message with the identifier of the client that needs an access token (and the connection URL) for opening the S2 message communication channel.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - s2ClientNodeId
+                - supportedProtocolVersions
+              properties:
+                supportedProtocolVersions:
+                  type: array
+                  items:
+                    type: string
+                  description: List of supported protocols versions by the client. The server will pick one of the supported protocols versions and return it in the connection details. If no common protocol can be found, an error is returned.
+                s2ClientNodeId:
+                  $ref: '#/components/schemas/S2NodeId'
+      responses:
+        '200':
+          description: Connection details to open a communication channel to the S2ServerNode.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionDetails'
+        '400':
+          description: Message that gives information what went wrong.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionDetailsErrorMessage'
+        '401':
+          description: Unauthorized
+  /unpair:
+    post:
+      security:
+        - accessToken: []
+      description: Perform unpair operation for a specific client.
+      requestBody:
+        description: A json message with the identifier of the client that should be unpaired.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                s2ClientNodeId:
+                  $ref: '#/components/schemas/S2NodeId'
+      responses:
+        '204':
+          description: Unpairing successful.
+        '401':
+          description: Unauthorized
+        '404':
+          description: S2ClientNodeId not found
+
+
+components:
+  schemas:
+    PairingInfo:
+      type: object
+      description: The schema for the PairingInfo structure is not associated with a HTTP API path as this information is obtained from a S2 Server Node UI and not by means of a API call. 
+      required:
+        - token
+        - validUntil
+        - pairingUrl
+      properties:
+        pairingUrl:
+          type: string
+          format: url
+        token:
+          $ref: "#/components/schemas/PairingToken"
+        validUntil:
+          type: string
+          format: date-time
+    PairingClientInfo:
+      type: object
+      required:
+        - s2ClientNodeId
+        - s2ClientNodeDescription
+      properties:
+        s2ClientNodeId:
+          $ref: "#/components/schemas/S2NodeId"
+        s2ClientNodeDescription:
+          $ref: "#/components/schemas/S2NodeDescription"
+    PairingRequest:
+      type: object
+      required:
+        - token
+        - s2ClientNodeId
+        - s2ClientNodeDescription
+      properties:
+        token:
+          $ref: "#/components/schemas/PairingToken"
+        s2ClientNodeId:
+          $ref: "#/components/schemas/S2NodeId"
+        s2ClientNodeDescription:
+          $ref: "#/components/schemas/S2NodeDescription"
+    PairingResponse:
+      type: object
+      required:
+        - s2ServerNodeId
+        - accessToken
+        - serverNodeDescription
+      properties:
+        s2ServerNodeId:
+          type: string
+          format: uuid
+        accessToken:
+          $ref: "#/components/schemas/AccessToken"
+          description: "One time access token which should be used by the client to open an authorized connection. TODO: add requirement in terms of minimum length and revokability"
+        s2ServerNodeDescription:
+          $ref: "#/components/schemas/S2NodeDescription"
+    PairingResponseErrorMessage:
+      type: object
+      required:
+        - errorMessage
+      properties:
+        errorMessage:
+          type: string
+          enum:
+            - "Invalid pairing token"
+            - "Invalid combination of roles"
+            - "Incompatible S2 message versions"
+            - "Parsing error"
+            - "Other"
+        additionalInfo:
+          type: string
+    S2NodeId:
+      description: Unique identifier of the S2 node
+      type: string
+      format: uuid
+    ConnectionDetails:
+      type: object
+      required:
+        - connectionUrl
+        - selectedProtocolVersion
+        - tokenPair
+      properties:
+        connectionUrl:
+          description: The URL of the communication channel endpoint
+          type: string
+          format: url
+        selectedProtocolVersion:
+          type: string
+          description: The protocol version selected by the server from the list of supported protocol versions provided by the client.
+        tokenPair:
+          type: object
+          required:
+            - communicationToken
+            - accessToken
+          properties:
+            communicationToken:
+              $ref: "#/components/schemas/CommunicationToken"
+            accessToken:
+              $ref: "#/components/schemas/AccessToken"
+    ConnectionDetailsErrorMessage:
+      type: object
+      required:
+        - errorMessage
+      properties:
+        errorMessage:
+          type: string
+          enum:
+            - "Unknown node ID"
+            - "No common protocol version"
+            - "Parsing error"
+            - "Other"
+        additionalInfo:
+          type: string
+    S2NodeDescription:
+      required:
+        - "brand"
+        - "type"
+        - "modelName"
+        - "role"
+        - "deployment"
+        - "supportedS2MessageVersions"
+      type: object
+      description: Information about the S2 node
+      properties:
+        brand:
+          type: string
+        logoUri:
+          type: string
+          format: uri
+        type:
+          type: string
+        modelName:
+          type: string
+        userDefinedName:
+          type: string
+        role:
+          $ref: "#/components/schemas/S2Role"
+        deployment:
+          $ref: "#/components/schemas/Deployment"
+        supportedS2MessageVersions:
+          description: The versions of the S2 JSON message schemas this s2Node implemenation currently supports
+          type: array
+          items:
+            type: string
+    S2Role:
+      type: string
+      enum:
+        - CEM
+        - RM
+    Deployment:
+      type: string
+      enum:
+        - WAN
+        - LAN
+    PairingToken:
+      type: string
+      description: "Code that is used to pair two S2 nodes. The server node shows the code to the end user who submits the code to the user interface of the client node. In case of a local-local deployment, the code also contains the shortened fingerprint of the server certificate to enable the client node to verify it is connecting to the right server node.
+                     This token consist of two parts. The first part is the pairingToken itself, which consists of 6 bytes and is valid for 10 minutes. The second part is only used by local servers with a self signed CA certificate. It consists of the first bytes (minimal 12, base64 encoded) of the self signed CA certificate. It's validity is equal to the validity of the certificate."
+      pattern: "^[0-9a-zA-Z]{6,}(-[A-Za-z0-9+/]*={0,3})?$"
+      example: "ABcd93-ABcd93ABcd93"
+    AccessToken:
+      description: "One-time access token for secure access to the S2 message communication channel. It must be renewed every time a client wants to access the S2 message communication channel by calling the requestToken endpoint.\
+                     This token is valid for one time login, with a maximum 5 years, and should have a minimum length of 32 bytes."
+      type: string
+      format: byte
+    CommunicationToken:
+      description: "Token that is used to authorize the communication channel (e.g. WebSocket) between the S2 nodes. It is obtained by calling the requestToken endpoint and is valid for a single connection to the S2 message communication channel.\
+                     This token is valid for maximum 30 seconds, and should have a minimum length of 32 bytes."
+      type: string
+      format: byte
+  securitySchemes:
+    accessToken:
+      description: "One-time access token for secure access to the S2 message communication channel. It must be renewed every time a client wants to access the S2 message communication channel by calling the requestToken endpoint."
+      type: http
+      scheme: bearer
