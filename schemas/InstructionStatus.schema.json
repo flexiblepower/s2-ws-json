@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/InstructionStatus.schema.json",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/v1.0.0-beta/schemas/InstructionStatus.schema.json",
     "title": "InstructionStatus",
     "type": "string",
     "enum": ["NEW", "ACCEPTED", "REJECTED", "REVOKED", "STARTED", "SUCCEEDED", "ABORTED"],

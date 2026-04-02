@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/main/s2-json-schema/schemas/CommodityQuantity.schema.json",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/v1.0.0-beta/schemas/CommodityQuantity.schema.json",
     "title": "CommodityQuantity",
     "type": "string",
     "enum": ["ELECTRIC.POWER.L1", "ELECTRIC.POWER.L2", "ELECTRIC.POWER.L3", "ELECTRIC.POWER.3_PHASE_SYMMETRIC", "NATURAL_GAS.FLOW_RATE", "HYDROGEN.FLOW_RATE", "HEAT.TEMPERATURE", "HEAT.FLOW_RATE", "HEAT.THERMAL_POWER", "OIL.FLOW_RATE"],
