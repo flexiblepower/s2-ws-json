@@ -1,6 +1,8 @@
 # s2-ws-json
 A WebSockets and JSON based protocol specification implementing the EN50491-12-2 "S2" standard for home and building energy management
 
+> **Note about Discovery and Pairing**: the OpenAPi specification of the S2 Discovery and Pairing process were previously part of this s2-ws-json repository. Those specification have been moved to the [S2 Connect](https://github.com/flexiblepower/s2-connect) repository.
+
 ## Status
 This protocol specification is still under development and not yet stable. It is being developed as part of the Dutch [GO-e project](https://www.tno.nl/nl/duurzaam/systeemtransitie/toekomstbestendige-energienetten/flexibel-elektriciteitsnet/).
 
