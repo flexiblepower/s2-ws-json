@@ -1,0 +1,8 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/v1.0.0/schemas/EnergyManagementRole.schema.json",
+    "title": "EnergyManagementRole",
+    "type": "string",
+    "enum": ["CEM", "RM"],
+    "description": "CEM: Customer Energy Manager\nRM: Resource Manager"
+}

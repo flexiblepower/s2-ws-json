@@ -1,0 +1,8 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/v1.0.0/schemas/RoleType.schema.json",
+    "title": "RoleType",
+    "type": "string",
+    "enum": ["ENERGY_PRODUCER", "ENERGY_CONSUMER", "ENERGY_STORAGE"],
+    "description": "ENERGY_PRODUCER: Identifier for RoleType Producer\nENERGY_CONSUMER: Identifier for RoleType Consumer\nENERGY_STORAGE: Identifier for RoleType Storage"
+}

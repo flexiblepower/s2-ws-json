@@ -1,0 +1,8 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/v1.0.0/schemas/Duration.schema.json",
+    "title": "Duration",
+    "type": "integer",
+    "minimum": 0,
+    "description": "Duration in milliseconds"
+}

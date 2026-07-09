@@ -1,0 +1,8 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/flexiblepower/s2-ws-json/v1.0.0/schemas/SessionRequestType.schema.json",
+    "title": "SessionRequestType",
+    "type": "string",
+    "enum": ["RECONNECT", "TERMINATE"],
+    "description": "RECONNECT: Please reconnect the WebSocket session. Once reconnected, it starts from scratch with a handshake.\nTERMINATE: Disconnect the session (client can try to reconnecting with exponential backoff)"
+}
