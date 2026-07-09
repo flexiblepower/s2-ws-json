@@ -23,9 +23,6 @@ Documentation for all S2 specification projects can be found on [docs.s2standard
 
 Inside the `messages` directory schemas can be found for messages that can be sent individually over the WebSocket session. Inside the `schemas` directory schemas can be found that are used within messages, but cannot be send individually.
 
-## Status
-The specification is still under development, and currently in beta.
-
 ## Discussion
 You are welcome to join the discussion on the [S2 Discord server](https://discord.com/invite/NyFMEPmuDw)! For specific feedback to this project you can of course also open issue.
 
