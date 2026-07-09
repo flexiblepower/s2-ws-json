@@ -6,6 +6,9 @@ For more information about S2 visit [s2standard.org](https://s2standard.org/).
 
 This repository contains the JSON schema files for the messages that are being exchanged. It is often used in combination with [S2 Connect](https://github.com/flexiblepower/s2-connect), which specifies how these messages can be exchanged over IP-based networks.
 
+> **Note:** This repository was previously called `s2-ws-json`, and contained both the OpenAPI files for discovery and pairing, as well as the JSON schemas for the S2 messages. This repository has been renamed to `s2-json`, and only contains the JSON schemas for the S2 messages. The discovery and pairing files have been moved to the repository [`s2-connect`](https://github.com/flexiblepower/s2-connect). 
+
+
 ## The S2 standard
 S2 Connect is a solution that builds upon two other specification projects. Note that each of these projects could be used on its own.
 
